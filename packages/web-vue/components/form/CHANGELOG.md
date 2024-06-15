@@ -2,6 +2,42 @@
 changelog: true
 ```
 
+## 2.54.0
+
+`2023-12-15`
+
+
+## 2.51.2
+
+`2023-09-15`
+
+### 🐛 BugFix
+
+- scroll-to-first-error throws error in nested form items ([#2707](https://github.com/arco-design/arco-design-vue/pull/2707))
+
+
+## 2.51.0
+
+`2023-09-01`
+
+### 🆕 Feature
+
+- add scroll into view to the field ([#2680](https://github.com/arco-design/arco-design-vue/pull/2680))
+
+
+## 2.44.2
+
+`2023-03-17`
+
+### 🐛 BugFix
+
+- Fix the problem that the array format is not supported in the field attribute ([#2242](https://github.com/arco-design/arco-design-vue/pull/2242))
+
+### 💎 Enhancement
+
+- Add Chinese inspection information ([#2240](https://github.com/arco-design/arco-design-vue/pull/2240))
+
+
 ## 2.43.2
 
 `2023-02-24`

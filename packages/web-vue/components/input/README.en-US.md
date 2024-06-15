@@ -86,7 +86,14 @@ description: Basic form components have been expanded on the basis of native con
 
 |Attribute|Description|Type|Default|
 |---|---|---|:---:|
+|visibility **(v-model)**|Whether is visible|`boolean`|`-`|
+|default-visibility|Default visibility|`boolean`|`true`|
 |invisible-button|Whether to show visible buttons|`boolean`|`true`|
+### `<input-password>` Events
+
+|Event Name|Description|Parameters|
+|---|---|---|
+|visibility-change|Callback when visibility changes|visible: `boolean`|
 
 
 
@@ -100,7 +107,7 @@ description: Basic form components have been expanded on the basis of native con
 |disabled|Whether to disable|`boolean`|`false`||
 |size|Input size|`'mini' \| 'small' \| 'medium' \| 'large'`|`'medium'`||
 |button-text|The text of the search button will replace the original icon after use|`string`|`-`|2.16.0|
-|button-props|Button props|`object`|`-`||
+|button-props|Button props|`ButtonProps`|`-`||
 ### `<input-search>` Events
 
 |Event Name|Description|Parameters|

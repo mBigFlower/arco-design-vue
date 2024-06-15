@@ -2,6 +2,56 @@
 changelog: true
 ```
 
+## 2.54.3
+
+`2024-01-19`
+
+### 🐛 BugFix
+
+- adjust incorrect type definitions and documentation ([#2924](https://github.com/arco-design/arco-design-vue/pull/2924))
+- fix spelling mistakes ([#2924](https://github.com/arco-design/arco-design-vue/pull/2924))
+
+
+## 2.50.0
+
+`2023-08-11`
+
+### 🆕 Feature
+
+- Support keyboard shortcuts, mouse wheel operation and a series of functions ([#2616](https://github.com/arco-design/arco-design-vue/pull/2616))
+
+### 🆎 TypeScript
+
+- added  image-preview-action type definition ([#2625](https://github.com/arco-design/arco-design-vue/pull/2625))
+
+
+## 2.48.1
+
+`2023-07-14`
+
+### 🐛 BugFix
+
+- icon not centered without alt or description in error state ([#2563](https://github.com/arco-design/arco-design-vue/pull/2563))
+
+
+## 2.46.0
+
+`2023-05-12`
+
+### 🆕 Feature
+
+- add actions slot ([#2389](https://github.com/arco-design/arco-design-vue/pull/2389))
+
+
+## 2.45.1
+
+`2023-04-14`
+
+### 🐛 BugFix
+
+- Fix `sizeStyle` failure issue ([#2327](https://github.com/arco-design/arco-design-vue/pull/2327))
+
+
 ## 2.41.0
 
 `2022-12-30`

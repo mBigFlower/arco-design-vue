@@ -19,7 +19,9 @@
               <IconImageClose />
             </slot>
           </div>
-          <div :class="`${prefixCls}-error-alt`">{{ alt || description }}</div>
+          <div v-if="alt || description" :class="`${prefixCls}-error-alt`">
+            {{ alt || description }}
+          </div>
         </div>
       </slot>
       <slot v-if="isLoading && (showLoader || $slots.loader)" name="loader">
@@ -372,7 +374,7 @@ export default defineComponent({
       wrapperStyles,
       showFooter,
       imgProps,
-      imgStyle: sizeStyle.value,
+      imgStyle: sizeStyle,
       isLoaded,
       isError,
       isLoading,

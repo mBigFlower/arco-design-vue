@@ -2,6 +2,51 @@
 changelog: true
 ```
 
+## 2.54.0
+
+`2023-12-15`
+
+### 💎 Enhancement
+
+- Modifying `multiple` and `pathMode` will trigger changes in the binding value ([#2867](https://github.com/arco-design/arco-design-vue/pull/2867))
+
+
+## 2.51.1
+
+`2023-09-08`
+
+### 🐛 BugFix
+
+- fix empty state in Cascader Virtual list ([#2686](https://github.com/arco-design/arco-design-vue/pull/2686))
+
+
+## 2.49.0
+
+`2023-07-21`
+
+### 🆕 Feature
+
+- Add virtual list support ([#2577](https://github.com/arco-design/arco-design-vue/pull/2577))
+
+
+## 2.46.0
+
+`2023-05-12`
+
+### 🆕 Feature
+
+- support full path search ([#2363](https://github.com/arco-design/arco-design-vue/pull/2363))
+
+
+## 2.45.1
+
+`2023-04-14`
+
+### 🐛 BugFix
+
+- Fix the abnormal display of search results when the width of the control is short ([#2326](https://github.com/arco-design/arco-design-vue/pull/2326))
+
+
 ## 2.40.0
 
 `2022-12-09`

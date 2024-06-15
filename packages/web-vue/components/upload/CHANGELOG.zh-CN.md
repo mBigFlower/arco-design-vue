@@ -2,6 +2,38 @@
 changelog: true
 ```
 
+## 2.55.2
+
+`2024-05-10`
+
+### 🐛 问题修复
+
+- 修复上传组件预览样式引入缺失 ([#3101](https://github.com/arco-design/arco-design-vue/pull/3101))
+
+
+## 2.55.1
+
+`2024-03-29`
+
+
+## 2.44.6
+
+`2023-03-31`
+
+### 🐛 问题修复
+
+- 调整 extra-button 插槽参数 ([#2272](https://github.com/arco-design/arco-design-vue/pull/2272))
+
+
+## 2.44.2
+
+`2023-03-17`
+
+### 🆎 类型修正
+
+- 允许beforeUpload返回布尔值 ([#2204](https://github.com/arco-design/arco-design-vue/pull/2204))
+
+
 ## 2.43.0
 
 `2023-02-10`

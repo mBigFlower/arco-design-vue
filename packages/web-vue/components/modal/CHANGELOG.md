@@ -2,6 +2,73 @@
 changelog: true
 ```
 
+## 2.54.6
+
+`2024-03-01`
+
+### 💅 Style
+
+- fix fade-modal transition effect works on enter state ([#3007](https://github.com/arco-design/arco-design-vue/pull/3007))
+
+
+## 2.50.0
+
+`2023-08-11`
+
+### 💎 Enhancement
+
+- add hide-title prop, support hide title ([#2605](https://github.com/arco-design/arco-design-vue/pull/2605))
+
+### 🆎 TypeScript
+
+- Complete missing properties in ModalConfig ([#2628](https://github.com/arco-design/arco-design-vue/pull/2628))
+
+
+## 2.50.0
+
+`2023-8-1`
+
+### 💎 Enhancement
+
+- add hide-title prop, support hide title ([#2605](https://github.com/arco-design/arco-design-vue/pull/2605))
+
+## 2.47.0
+
+`2023-06-02`
+
+### ⚠️ Important Attention
+
+- fix modal confirm missing warning icon in the title ([#2465](https://github.com/arco-design/arco-design-vue/pull/2465))
+
+
+## 2.46.2
+
+`2023-05-31`
+
+### 🐛 BugFix
+
+- fix can not set width attribute ([#2467](https://github.com/arco-design/arco-design-vue/pull/2467))
+
+
+## 2.46.1
+
+`2023-05-26`
+
+### 🐛 BugFix
+
+- fix modal drag error when define top prop ([#2446](https://github.com/arco-design/arco-design-vue/pull/2446))
+- Fix the problem that there is no full screen when `width` and `fullscreen` are set at the same time ([#2441](https://github.com/arco-design/arco-design-vue/pull/2441))
+
+### 🆎 TypeScript
+
+- fix onOk & onCancel type error in function call ([#2426](https://github.com/arco-design/arco-design-vue/pull/2426))
+
+
+## 2.45.2
+
+`2023-04-21`
+
+
 ## 2.43.2
 
 `2023-02-24`

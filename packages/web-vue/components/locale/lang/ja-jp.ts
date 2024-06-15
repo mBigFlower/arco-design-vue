@@ -102,6 +102,7 @@ const lang: ArcoLang = {
     dragHover: 'ドロップしてアップロードを始めます',
     error: 'アップロード失敗しました',
   },
+  calendar: calendarLang,
   datePicker: {
     view: calendarLang.view,
     month: calendarLang.month,
@@ -144,6 +145,59 @@ const lang: ArcoLang = {
     expand: '展開',
     collapse: '折る',
     edit: '編集',
+  },
+  form: {
+    validateMessages: {
+      required: '#{field} が必要です',
+      type: {
+        string: 'は有効なテキストタイプではありません',
+        number: 'は有効な数値タイプではありません',
+        boolean: 'は有効なブール型ではありません',
+        array: 'は有効な配列型ではありません',
+        object: 'は有効なオブジェクトタイプではありません',
+        url: 'は有効なURLアドレスではありません',
+        email: 'は有効なメールアドレスではありません',
+        ip: 'は有効なIPアドレスではありません',
+      },
+      number: {
+        min: '`#{value}` は最小値 `#{min}` 未満です',
+        max: '`#{value}` は最大値 `#{max}` より大きい',
+        equal: '`#{value}` は `#{equal}` と等しくありません',
+        range: '`#{value}` は範囲 `#{min} ~ #{max}` にありません',
+        positive: '`#{value}` は正の数ではありません',
+        negative: '`#{value}` は負の数ではありません',
+      },
+      array: {
+        length: '`#{value}` は #{length} と等しくありません',
+        minLength: '`#{value}` は少なくとも #{minLength}',
+        maxLength: '`#{value}`は最大 #{maxLength}',
+        includes: '#{value} には #{includes} は含まれません',
+        deepEqual: '#{value} は #{deepEqual} と等しくありません',
+        empty: '`#{value}` は空の配列ではありません',
+      },
+      string: {
+        minLength: '最小文字数は #{minLength}',
+        maxLength: '最大文字数は #{maxLength}',
+        length: '`#{value}` 文字数が #{length} と等しくありません',
+        match: '`#{value}` はパターン #{pattern} と一致しません',
+        uppercase: '`#{value}` はすべて大文字ではありません',
+        lowercase: '`#{value}` はすべて小文字ではありません',
+      },
+      object: {
+        deepEqual: '`#{value}`は#{deepEqual}と等しくありません',
+        hasKeys: '`#{value}` にはフィールド #{keys} が含まれていません',
+        empty: '`#{value}`はオブジェクトではありません',
+      },
+      boolean: {
+        true: '`true` であると期待します',
+        false: '`false` であると期待します',
+      },
+    },
+  },
+  colorPicker: {
+    history: '最近使用した色',
+    preset: 'システムのデフォルトの色',
+    empty: '空の',
   },
 };
 

@@ -23,6 +23,8 @@ import Option from '../select/option.vue';
 import { useSelect } from '../select/hooks/use-select';
 import { getKeyFromValue } from '../select/utils';
 import { useFormItem } from '../_hooks/use-form-item';
+import VirtualList from '../_components/virtual-list-v2';
+import { VirtualListProps } from '../_components/virtual-list-v2/interface';
 
 export default defineComponent({
   name: 'AutoComplete',
@@ -105,6 +107,15 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    /**
+     * @zh 传递虚拟列表属性，传入此参数以开启虚拟滚动 [VirtualListProps](#VirtualListProps)
+     * @en Pass the virtual list attribute, pass in this parameter to turn on virtual scrolling [VirtualListProps](#VirtualListProps)
+     * @type VirtualListProps
+     * @version 2.50.0
+     */
+    virtualListProps: {
+      type: Object as PropType<VirtualListProps>,
+    },
   },
   emits: {
     'update:modelValue': (value: string) => true,
@@ -133,6 +144,20 @@ export default defineComponent({
      * @version 2.23.0
      */
     'clear': (ev: Event) => true,
+    /**
+     * @zh 下拉菜单发生滚动时触发
+     * @en Triggered when the drop-down scrolls
+     * @param {Event} ev
+     * @version 2.52.0
+     */
+    'dropdownScroll': (ev: Event) => true,
+    /**
+     * @zh 下拉菜单滚动到底部时触发
+     * @en Triggered when the drop-down menu is scrolled to the bottom
+     * @param {Event} ev
+     * @version 2.52.0
+     */
+    'dropdownReachBottom': (ev: Event) => true,
   },
   /**
    * @zh 弹出框的页脚
@@ -174,6 +199,10 @@ export default defineComponent({
     const computedPopupVisible = computed(
       () => _popupVisible.value && validOptionInfos.value.length > 0
     );
+
+    // VirtualList
+    const virtualListRef = ref();
+    const component = computed(() => (props.virtualListProps ? 'div' : 'li'));
 
     const handlePopupVisibleChange = (popupVisible: boolean) => {
       _popupVisible.value = popupVisible;
@@ -225,6 +254,14 @@ export default defineComponent({
       handleChange(value);
     };
 
+    const handleDropdownScroll = (e: Event) => {
+      emit('dropdownScroll', e);
+    };
+
+    const handleDropdownReachBottom = (e: Event) => {
+      emit('dropdownReachBottom', e);
+    };
+
     const { validOptions, optionInfoMap, validOptionInfos, handleKeyDown } =
       useSelect({
         options: data,
@@ -232,6 +269,7 @@ export default defineComponent({
         filterOption: mergedFilterOption,
         popupVisible: computedPopupVisible,
         valueKeys: computedValueKeys,
+        component,
         dropdownRef,
         optionRefs,
         onSelect: handleSelect,
@@ -273,13 +311,28 @@ export default defineComponent({
           ref={dropdownRef}
           class={`${prefixCls}-dropdown`}
           v-slots={{
-            footer: slots.footer,
+            'default': () => [
+              ...validOptions.value.map((info) =>
+                renderOption(info as SelectOptionInfo)
+              ),
+            ],
+            'virtual-list': () => (
+              <VirtualList
+                {...props.virtualListProps}
+                ref={virtualListRef}
+                data={validOptions.value}
+                v-slots={{
+                  item: ({ item }: { item: SelectOptionInfo }) =>
+                    renderOption(item),
+                }}
+              />
+            ),
+            'footer': slots.footer,
           }}
-        >
-          {validOptions.value.map((info) =>
-            renderOption(info as SelectOptionInfo)
-          )}
-        </SelectDropdown>
+          virtualList={Boolean(props.virtualListProps)}
+          onScroll={handleDropdownScroll}
+          onReachBottom={handleDropdownReachBottom}
+        />
       );
     };
 

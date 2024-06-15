@@ -102,6 +102,7 @@ const lang: ArcoLang = {
     dragHover: 'Kosongkan fail dan mula memuat naik',
     error: 'muatnaik gagal',
   },
+  calendar: calendarLang,
   datePicker: {
     view: calendarLang.view,
     month: calendarLang.month,
@@ -144,6 +145,11 @@ const lang: ArcoLang = {
     edit: 'edit',
     expand: 'lipat',
     collapse: 'mengembang',
+  },
+  colorPicker: {
+    history: 'Warna yang digunakan baru-baru ini',
+    preset: 'Warna lalai sistem',
+    empty: 'Tiada data',
   },
 };
 

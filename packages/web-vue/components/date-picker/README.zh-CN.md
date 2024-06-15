@@ -71,11 +71,12 @@ description: 选择日期。支持年、月、周、日类型，支持范围选�
 |disabled-time|不可选取的时间|`(current: Date) => DisabledTimeProps`|`-`||
 |picker-value **(v-model)**|面板显示的日期|`Date \| string \| number`|`-`||
 |default-picker-value|面板默认显示的日期|`Date \| string \| number`|`-`||
-|popup-container|弹出框的挂载容器|`string \| HTMLElement \| null \| undefined`|`-`||
+|popup-container|弹出框的挂载容器|`string \| HTMLElement`|`-`||
 |value-format|值的格式，对 `value` `defaultValue` `pickerValue` `defaultPickerValue` 以及事件中的返回值生效，支持设置为时间戳，Date 和字符串（参考[字符串解析格式](#字符串解析格式)）。如果没有指定，将格式化为字符串，格式同 `format`。|`'timestamp' \| 'Date' \| string`|`-`|2.16.0|
 |preview-shortcut|是否要预览快捷选择的结果|`boolean`|`true`|2.28.0|
 |show-confirm-btn|是否显示确认按钮，`showTime = true` 的时候始终显示。|`boolean`|`false`|2.29.0|
 |disabled-input|是否禁止键盘输入日期|`boolean`|`false`|2.43.0|
+|abbreviation|是否启用缩写|`boolean`|`true`|2.45.0|
 ### `Common` Events
 
 |事件名|描述|参数|
@@ -113,6 +114,8 @@ description: 选择日期。支持年、月、周、日类型，支持范围选�
 |day-start-of-week|每周的第一天开始于周几，0 - 周日，1 - 周一，以此类推。|`0 \| 1 \| 2 \| 3 \| 4 \| 5 \| 6`|`0`|2-6 from 2.21.0|
 |show-time|是否增加时间选择|`boolean`|`false`||
 |time-picker-props|时间显示的参数，参考 [TimePickerProps](/vue/component/time-picker)|`Partial<TimePickerProps>`|`-`||
+|disabled|是否禁用|`boolean`|`false`||
+|disabled-date|不可选取的日期|`(current?: Date) => boolean`|`-`||
 |disabled-time|不可选取的时间|`(current: Date) => DisabledTimeProps`|`-`||
 |show-now-btn|是否显示 `showTime` 时，选择当前时间的按钮|`boolean`|`true`||
 
@@ -187,6 +190,7 @@ description: 选择日期。支持年、月、周、日类型，支持范围选�
 |separator|范围选择器输入框内的分割符号|`string`|`-`||
 |exchange-time|时间是否会交换，默认情况下时间会影响和参与开始和结束值的排序，如果要固定时间顺序，可将其关闭。|`boolean`|`true`|2.25.0|
 |disabled-input|是否禁止键盘输入日期|`boolean`|`false`|2.43.0|
+|abbreviation|是否启用缩写|`boolean`|`true`||
 ### `<range-picker>` Events
 
 |事件名|描述|参数|
@@ -246,3 +250,9 @@ description: 选择日期。支持年、月、周、日类型，支持范围选�
 `Do`|1st... 3st|带序号的月份中的某天
 `X`|1410715640.579|Unix 时间戳
 `x`|1410715640579|Unix 毫秒时间戳
+
+## FAQ
+
+### 关于 `locale` 字段
+可以使用组件库提供的语言包配置 `locale` 字段。
+

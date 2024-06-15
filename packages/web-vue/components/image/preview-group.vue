@@ -11,7 +11,11 @@
     :popup-container="popupContainer"
     :render-to-body="renderToBody"
     @close="onClose"
-  />
+  >
+    <template v-if="$slots.actions" #actions>
+      <slot name="actions" :url="currentUrl" />
+    </template>
+  </ImagePreview>
 </template>
 <script lang="tsx">
 import {
@@ -83,7 +87,7 @@ export default defineComponent({
     },
     /**
      * @zh 默认是否可见，非受控
-     * @en Default visiblity
+     * @en Default visibility
      */
     defaultVisible: {
       type: Boolean,
@@ -125,7 +129,7 @@ export default defineComponent({
      * @en Set the mount point of the pop-up box, the same as the `to` of `teleport`, the default value is document.body
      */
     popupContainer: {
-      type: [Object, String] as PropType<HTMLElement | string>,
+      type: [String, Object] as PropType<string | HTMLElement>,
     },
   },
   emits: [
@@ -142,7 +146,13 @@ export default defineComponent({
     'visible-change',
     'update:visible',
   ],
-  setup(props: ImagePreviewGroupProps, { emit }) {
+  /**
+   * @zh 自定义额外的操作项
+   * @en Customize additional action items
+   * @slot actions
+   * @version 2.46.0
+   */
+  setup(props, { emit }) {
     const {
       srcList,
       visible,

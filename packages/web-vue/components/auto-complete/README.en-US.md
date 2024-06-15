@@ -30,6 +30,7 @@ description: The auto-complete function of the input.
 |filter-option|Custom option filtering method|`FilterOption`|`true`||
 |trigger-props|trigger props|`TriggerProps`|`-`|2.14.0|
 |allow-clear|Whether to allow the input to be cleared|`boolean`|`false`|2.23.0|
+|virtual-list-props|Pass the virtual list attribute, pass in this parameter to turn on virtual scrolling [VirtualListProps](#VirtualListProps)|`VirtualListProps`|`-`|2.50.0|
 ### `<auto-complete>` Events
 
 |Event Name|Description|Parameters|version|
@@ -38,6 +39,8 @@ description: The auto-complete function of the input.
 |search|Emitted when the user searches|value: `string`||
 |select|Emitted when an option is selected|value: `string`||
 |clear|Triggered when the user clicks the clear button|ev: `Event`|2.23.0|
+|dropdown-scroll|Triggered when the drop-down scrolls|ev: `Event`|2.52.0|
+|dropdown-reach-bottom|Triggered when the drop-down menu is scrolled to the bottom|ev: `Event`|2.52.0|
 ### `<auto-complete>` Methods
 
 |Method|Description|Parameters|Return|version|

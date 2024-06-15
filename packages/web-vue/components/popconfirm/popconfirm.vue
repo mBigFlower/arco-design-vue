@@ -61,7 +61,7 @@ import IconInfoCircleFill from '../icon/icon-info-circle-fill';
 import IconCheckCircleFill from '../icon/icon-check-circle-fill';
 import IconExclamationCircleFill from '../icon/icon-exclamation-circle-fill';
 import IconCloseCircleFill from '../icon/icon-close-circle-fill';
-import ArcoButton from '../button';
+import ArcoButton, { ButtonProps } from '../button';
 import Trigger from '../trigger';
 import { useI18n } from '../locale';
 import { ClassName } from '../_utils/types';
@@ -141,14 +141,14 @@ export default defineComponent({
      * @en Props of ok button
      */
     okButtonProps: {
-      type: Object,
+      type: Object as PropType<ButtonProps>,
     },
     /**
      * @zh 取消按钮的Props
      * @en Props of cancel button
      */
     cancelButtonProps: {
-      type: Object,
+      type: Object as PropType<ButtonProps>,
     },
     /**
      * @zh 弹出框内容的类名
@@ -183,7 +183,7 @@ export default defineComponent({
      * @en Mount container for popup
      */
     popupContainer: {
-      type: [String, Object] as PropType<string | HTMLElement | undefined>,
+      type: [String, Object] as PropType<string | HTMLElement>,
     },
     /**
      * @zh 触发 ok 事件前的回调函数。如果返回 false 则不会触发后续事件，也可使用 done 进行异步关闭。

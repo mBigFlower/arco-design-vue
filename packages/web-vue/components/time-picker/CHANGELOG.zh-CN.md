@@ -2,6 +2,25 @@
 changelog: true
 ```
 
+## 2.55.3
+
+`2024-06-07`
+
+### 🐛 问题修复
+
+- 修复只读模式仍可编辑问题 ([#3173](https://github.com/arco-design/arco-design-vue/pull/3173))
+- 补充 `placeholder` 类型定义 ([#3173](https://github.com/arco-design/arco-design-vue/pull/3173))
+
+
+## 2.44.6
+
+`2023-03-31`
+
+### 🐛 问题修复
+
+- 修复清除事件冒泡行为 ([#2271](https://github.com/arco-design/arco-design-vue/pull/2271))
+
+
 ## 2.41.0
 
 `2022-12-30`

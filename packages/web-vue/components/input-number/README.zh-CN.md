@@ -16,6 +16,8 @@ description: 仅允许输入数字格式的输入框。
 
 @import ./__demo__/prefix.md
 
+@import ./__demo__/step-icon.md
+
 @import ./__demo__/format.md
 
 @import ./__demo__/model.md
@@ -39,11 +41,12 @@ description: 仅允许输入数字格式的输入框。
 |formatter|定义输入框展示值|`func`|`-`||
 |parser|从 `formatter` 转换为数字，和 `formatter` 搭配使用|`func`|`-`||
 |placeholder|输入框提示文字|`string`|`-`||
-|hide-button|是否隐藏按钮（仅在`embed`模式可用）|`boolean`|`false`||
+|hide-button|是否隐藏按钮|`boolean`|`false`||
 |size|输入框大小|`'mini' \| 'small' \| 'medium' \| 'large'`|`'medium'`||
 |allow-clear|是否允许清空输入框|`boolean`|`false`||
 |model-event|触发 `v-model` 的事件|`'change' \| 'input'`|`'change'`||
-|read-only|只读|`boolean`|`false`|3.33.1|
+|read-only|只读|`boolean`|`false`|2.33.1|
+|input-attrs|内部 input 元素的属性|`object`|`-`|2.52.0|
 ### `<input-number>` Events
 
 |事件名|描述|参数|版本|
@@ -63,6 +66,8 @@ description: 仅允许输入数字格式的输入框。
 
 |插槽名|描述|参数|
 |---|:---:|---|
+|minus|数值减少图标|-|
+|plus|数值增加图标|-|
 |append|后置标签|-|
 |prepend|前置标签|-|
 |suffix|后缀|-|

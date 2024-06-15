@@ -2,6 +2,55 @@
 changelog: true
 ```
 
+## 2.55.0
+
+`2024-03-15`
+
+### 🆕 Feature
+
+- Added `input-value` related properties ([#3024](https://github.com/arco-design/arco-design-vue/pull/3024))
+
+
+## 2.49.1
+
+`2023-07-24`
+
+### 🐛 BugFix
+
+- Fix the problem that the default value of the `border` attribute is wrong ([#2580](https://github.com/arco-design/arco-design-vue/pull/2580))
+
+
+## 2.49.0
+
+`2023-07-21`
+
+### 🆕 Feature
+
+- Add header and footer visibility in empty data state ([#2573](https://github.com/arco-design/arco-design-vue/pull/2573))
+
+### 🐛 BugFix
+
+- Fix the problem that the border attribute is invalid ([#2568](https://github.com/arco-design/arco-design-vue/pull/2568))
+
+
+## 2.47.1
+
+`2023-06-09`
+
+### 🐛 BugFix
+
+- Fix the problem that the search content under the virtual list cannot be selected ([#2488](https://github.com/arco-design/arco-design-vue/pull/2488))
+
+
+## 2.47.0
+
+`2023-06-02`
+
+### 🆕 Feature
+
+- Add header and footer slots ([#2417](https://github.com/arco-design/arco-design-vue/pull/2417))
+
+
 ## 2.39.1
 
 `2022-11-25`

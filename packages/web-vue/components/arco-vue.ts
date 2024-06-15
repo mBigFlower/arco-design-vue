@@ -2,7 +2,7 @@ import type { App, Plugin } from 'vue';
 import type { ArcoOptions } from './_utils/types';
 import { addI18nMessages, useLocale, getLocale } from './locale';
 import Affix from './affix';
-import Alter from './alert';
+import Alert from './alert';
 import Anchor, { AnchorLink } from './anchor';
 import AutoComplete from './auto-complete';
 import Avatar, { AvatarGroup } from './avatar';
@@ -10,11 +10,13 @@ import BackTop from './back-top';
 import Badge from './badge';
 import Breadcrumb, { BreadcrumbItem } from './breadcrumb';
 import Button, { ButtonGroup } from './button';
+import Calendar from './calendar';
 import Card, { CardMeta, CardGrid } from './card';
 import Carousel, { CarouselItem } from './carousel';
 import Cascader, { CascaderPanel } from './cascader';
 import Checkbox, { CheckboxGroup } from './checkbox';
 import Collapse, { CollapseItem } from './collapse';
+import ColorPicker from './color-picker';
 import Comment from './comment';
 import ConfigProvider from './config-provider';
 import DatePicker, {
@@ -37,7 +39,11 @@ import Empty from './empty';
 import Form, { FormItem } from './form';
 import Grid, { Row, Col, GridItem } from './grid';
 import Icon from './icon-component';
-import Image, { ImagePreview, ImagePreviewGroup } from './image';
+import Image, {
+  ImagePreview,
+  ImagePreviewAction,
+  ImagePreviewGroup,
+} from './image';
 import Input, { InputGroup, InputSearch, InputPassword } from './input';
 import InputNumber from './input-number';
 import InputTag from './input-tag';
@@ -91,6 +97,8 @@ import Typography, {
 } from './typography';
 import Upload from './upload';
 import OverflowList from './overflow-list';
+import VerificationCode from './verification-code';
+import Watermark from './watermark';
 
 import { useFormItem } from './_hooks/use-form-item';
 
@@ -104,10 +112,12 @@ const components: Record<string, Plugin> = {
   Space,
   Avatar,
   Badge,
+  Calendar,
   Card,
   Carousel,
   Collapse,
   Comment,
+  ColorPicker,
   Descriptions,
   Empty,
   Image,
@@ -140,7 +150,7 @@ const components: Record<string, Plugin> = {
   Tree,
   Upload,
   TreeSelect,
-  Alter,
+  Alert,
   Drawer,
   Message,
   Modal,
@@ -165,6 +175,8 @@ const components: Record<string, Plugin> = {
   Split,
   Icon,
   OverflowList,
+  Watermark,
+  VerificationCode,
 };
 
 const install = (app: App, options?: ArcoOptions) => {
@@ -175,10 +187,13 @@ const install = (app: App, options?: ArcoOptions) => {
 
 const ArcoVue = {
   ...components,
+  // Historical reason
+  Alter: Alert,
   AnchorLink,
   AvatarGroup,
   BreadcrumbItem,
   ButtonGroup,
+  Calendar,
   CardMeta,
   CardGrid,
   CarouselItem,
@@ -200,6 +215,7 @@ const ArcoVue = {
   Col,
   GridItem,
   ImagePreview,
+  ImagePreviewAction,
   ImagePreviewGroup,
   InputGroup,
   InputSearch,

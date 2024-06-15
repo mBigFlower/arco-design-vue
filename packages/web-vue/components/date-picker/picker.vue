@@ -264,9 +264,7 @@ export default defineComponent({
      * @en Mount container for pop-up box
      */
     popupContainer: {
-      type: [String, Object] as PropType<
-        string | HTMLElement | null | undefined
-      >,
+      type: [String, Object] as PropType<string | HTMLElement>,
     },
     mode: {
       type: String as PropType<'date' | 'year' | 'quarter' | 'month' | 'week'>,
@@ -328,6 +326,15 @@ export default defineComponent({
     disabledInput: {
       type: Boolean,
       default: false,
+    },
+    /**
+     * @zh 是否启用缩写
+     * @en Whether to enable abbreviation
+     * @version 2.45.0
+     */
+    abbreviation: {
+      type: Boolean,
+      default: true,
     },
   },
   emits: {
@@ -807,6 +814,7 @@ export default defineComponent({
         'disabledTime',
         'showTime',
         'hideTrigger',
+        'abbreviation',
       ]),
       showNowBtn: props.showNowBtn && mode.value === 'date',
       prefixCls,

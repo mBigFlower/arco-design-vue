@@ -18,6 +18,8 @@ description: Only input boxes in numeric format are allowed.
 
 @import ./__demo__/prefix.md
 
+@import ./__demo__/step-icon.md
+
 @import ./__demo__/format.md
 
 @import ./__demo__/model.md
@@ -41,11 +43,12 @@ description: Only input boxes in numeric format are allowed.
 |formatter|Define the display value of the input|`func`|`-`||
 |parser|Convert from `formatter` to number, and use with `formatter`|`func`|`-`||
 |placeholder|Input prompt text|`string`|`-`||
-|hide-button|Whether to hide the button (only available in `embed` mode)|`boolean`|`false`||
+|hide-button|Whether to hide the button|`boolean`|`false`||
 |size|Input size|`'mini' \| 'small' \| 'medium' \| 'large'`|`'medium'`||
 |allow-clear|Whether to allow the input to be cleared|`boolean`|`false`||
 |model-event|Trigger event for `v-model`|`'change' \| 'input'`|`'change'`||
-|read-only|Readonly|`boolean`|`false`|3.33.1|
+|read-only|Readonly|`boolean`|`false`|2.33.1|
+|input-attrs|Attributes of inner input elements|`object`|`-`|2.52.0|
 ### `<input-number>` Events
 
 |Event Name|Description|Parameters|version|
@@ -65,6 +68,8 @@ description: Only input boxes in numeric format are allowed.
 
 |Slot Name|Description|Parameters|
 |---|---|---|
+|minus|Minus|-|
+|plus|Plus|-|
 |append|Append|-|
 |prepend|Prepend|-|
 |suffix|Suffix|-|

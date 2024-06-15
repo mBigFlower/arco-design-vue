@@ -168,6 +168,11 @@ export interface TableColumnData {
    */
   width?: number;
   /**
+   * @zh 最小列宽
+   * @en Minimum column width
+   */
+  minWidth?: number;
+  /**
    * @zh 对齐方向
    * @en Alignment direction
    */
@@ -281,6 +286,7 @@ export interface TableColumnData {
   rowSpan?: number;
   index?: number;
   parent?: TableColumnData;
+  _resizeWidth?: number;
 }
 
 export interface TableBorder {

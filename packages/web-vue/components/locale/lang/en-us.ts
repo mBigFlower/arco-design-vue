@@ -1,3 +1,5 @@
+// @ts-ignore
+import { DefaultValidateMessage } from 'b-validate';
 import { ArcoCalendarLang, ArcoLang } from '../interface';
 
 const calendarLang: ArcoCalendarLang = {
@@ -102,6 +104,7 @@ const lang: ArcoLang = {
     dragHover: 'Release to upload',
     error: 'Upload Error',
   },
+  calendar: calendarLang,
   datePicker: {
     view: calendarLang.view,
     month: calendarLang.month,
@@ -144,6 +147,14 @@ const lang: ArcoLang = {
     expand: 'Expand',
     collapse: 'Collapse',
     edit: 'Edit',
+  },
+  form: {
+    validateMessages: DefaultValidateMessage,
+  },
+  colorPicker: {
+    history: 'History Colors',
+    preset: 'Preset Colors',
+    empty: 'Empty',
   },
 };
 

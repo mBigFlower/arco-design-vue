@@ -102,6 +102,7 @@ const lang: ArcoLang = {
     dragHover: '파일을 해제하고 업로드 시작',
     error: '업로드 실패',
   },
+  calendar: calendarLang,
   datePicker: {
     view: calendarLang.view,
     month: calendarLang.month,
@@ -144,6 +145,11 @@ const lang: ArcoLang = {
     edit: '편집하다',
     collapse: '겹',
     expand: '전개 하 다',
+  },
+  colorPicker: {
+    history: '최근 색상 사용',
+    preset: '시스템 기본 색상',
+    empty: '데이터 없음',
   },
 };
 

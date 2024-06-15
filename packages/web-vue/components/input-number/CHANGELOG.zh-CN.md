@@ -2,6 +2,69 @@
 changelog: true
 ```
 
+## 2.54.6
+
+`2024-03-01`
+
+### 🐛 问题修复
+
+- 修复步进按钮与 suffix/append 的样式重叠 ([#3005](https://github.com/arco-design/arco-design-vue/pull/3005))
+
+
+## 2.54.5
+
+`2024-02-21`
+
+### 🐛 问题修复
+
+- 修复双向绑定失效 ([#2961](https://github.com/arco-design/arco-design-vue/pull/2961))
+
+
+## 2.54.4
+
+`2024-02-02`
+
+### 🐛 问题修复
+
+- 修复 change 事件触发逻辑 ([#2915](https://github.com/arco-design/arco-design-vue/pull/2915))
+
+
+## 2.52.0
+
+`2023-09-22`
+
+### 🆕 新增功能
+
+- 增加 `input-attrs` 属性 ([#2716](https://github.com/arco-design/arco-design-vue/pull/2716))
+
+
+## 2.50.2
+
+`2023-08-25`
+
+### 💎 功能优化
+
+- 优化步长按钮的长按效果 ([#2668](https://github.com/arco-design/arco-design-vue/pull/2668))
+
+
+## 2.49.0
+
+`2023-07-21`
+
+### 🆕 新增功能
+
+- 增加数值操作自定义图标插槽 ([#2560](https://github.com/arco-design/arco-design-vue/pull/2560))
+
+
+## 2.47.0
+
+`2023-06-02`
+
+### ⚠️ 重点注意
+
+- `hide-button` 在 `mode="button"` 时也会生效 ([#2461](https://github.com/arco-design/arco-design-vue/pull/2461))
+
+
 ## 2.43.2
 
 `2023-02-24`

@@ -37,6 +37,8 @@ const Carousel = () => import('@web-vue/components/carousel/README.zh-CN.md');
 const CarouselEn = () => import('@web-vue/components/carousel/README.en-US.md');
 const Collapse = () => import('@web-vue/components/collapse/README.zh-CN.md');
 const CollapseEn = () => import('@web-vue/components/collapse/README.en-US.md');
+const Calendar = () => import('@web-vue/components/calendar/README.zh-CN.md');
+const CalendarEn = () => import('@web-vue/components/calendar/README.en-US.md');
 const Comment = () => import('@web-vue/components/comment/README.zh-CN.md');
 const CommentEn = () => import('@web-vue/components/comment/README.en-US.md');
 const Descriptions = () =>
@@ -182,6 +184,17 @@ const OverflowListEn = () =>
 const Scrollbar = () => import('@web-vue/components/scrollbar/README.zh-CN.md');
 const ScrollbarEn = () =>
   import('@web-vue/components/scrollbar/README.en-US.md');
+const Watermark = () => import('@web-vue/components/watermark/README.zh-CN.md');
+const WatermarkEn = () =>
+  import('@web-vue/components/watermark/README.en-US.md');
+const VerificationCode = () =>
+  import('@web-vue/components/verification-code/README.zh-CN.md');
+const VerificationCodeEn = () =>
+  import('@web-vue/components/verification-code/README.en-US.md');
+const ColorPicker = () =>
+  import('@web-vue/components/color-picker/README.zh-CN.md');
+const ColorPickerEn = () =>
+  import('@web-vue/components/color-picker/README.en-US.md');
 
 const docs = [
   {
@@ -346,6 +359,11 @@ const components = [
         componentEn: BadgeEn,
       },
       {
+        name: 'calendar',
+        component: Calendar,
+        componentEn: CalendarEn,
+      },
+      {
         name: 'card',
         component: Card,
         componentEn: CardEn,
@@ -446,6 +464,11 @@ const components = [
         componentEn: CheckboxEn,
       },
       {
+        name: 'colorPicker',
+        component: ColorPicker,
+        componentEn: ColorPickerEn,
+      },
+      {
         name: 'datePicker',
         component: DatePicker,
         componentEn: DatePickerEn,
@@ -464,6 +487,11 @@ const components = [
         name: 'inputNumber',
         component: InputNumber,
         componentEn: InputNumberEn,
+      },
+      {
+        name: 'verificationCode',
+        component: VerificationCode,
+        componentEn: VerificationCodeEn,
       },
       {
         name: 'inputTag',
@@ -664,6 +692,11 @@ const components = [
         name: 'scrollbar',
         component: Scrollbar,
         componentEn: ScrollbarEn,
+      },
+      {
+        name: 'watermark',
+        component: Watermark,
+        componentEn: WatermarkEn,
       },
     ],
   },

@@ -74,6 +74,7 @@
         :total-level="totalLevel"
         :check-strictly="checkStrictly"
         :loading="loading"
+        :virtual-list-props="virtualListProps"
         dropdown
       >
         <template v-if="$slots.empty" #empty>
@@ -121,6 +122,7 @@ import { cascaderInjectionKey } from './context';
 import { Size } from '../_utils/constant';
 import { debounce } from '../_utils/debounce';
 import { useFormItem } from '../_hooks/use-form-item';
+import { VirtualListProps } from '../_components/virtual-list-v2/interface';
 
 export default defineComponent({
   name: 'Cascader',
@@ -298,9 +300,7 @@ export default defineComponent({
      * @en Mount container for popup
      */
     popupContainer: {
-      type: [String, Object] as PropType<
-        string | HTMLElement | null | undefined
-      >,
+      type: [String, Object] as PropType<string | HTMLElement>,
     },
     /**
      * @zh 多选模式下，最多显示的标签数量。0 表示不限制
@@ -416,6 +416,15 @@ export default defineComponent({
     expandChild: {
       type: Boolean,
       default: false,
+    },
+    /**
+     * @zh 传递虚拟列表属性，传入此参数以开启虚拟滚动 [VirtualListProps](#VirtualListProps)
+     * @en Pass the virtual list attribute, pass in this parameter to turn on virtual scrolling [VirtualListProps](#VirtualListProps)
+     * @type VirtualListProps
+     * @version 2.49.0
+     */
+    virtualListProps: {
+      type: Object as PropType<VirtualListProps>,
     },
   },
   emits: {
@@ -542,6 +551,8 @@ export default defineComponent({
       valueKey,
       expandTrigger,
       expandChild,
+      pathMode,
+      multiple,
     } = toRefs(props);
     const _value = ref(props.defaultValue);
     const _inputValue = ref(props.defaultInputValue);
@@ -634,18 +645,28 @@ export default defineComponent({
       () => props.popupVisible ?? _popupVisible.value
     );
 
+    const getFilteredStatus = (label: string) => {
+      return label
+        ?.toLocaleLowerCase()
+        .includes(computedInputValue.value?.toLocaleLowerCase());
+    };
+
     const filteredLeafOptions = computed(() => {
       const options = props.checkStrictly
         ? Array.from(optionMap.values())
         : Array.from(leafOptionSet);
 
-      return options.filter(
-        (item) =>
-          props.filterOption?.(computedInputValue.value, item.raw) ??
-          item.label
-            ?.toLocaleLowerCase()
-            .includes(computedInputValue.value?.toLocaleLowerCase())
-      );
+      return options.filter((item) => {
+        if (isFunction(props.filterOption)) {
+          return props.filterOption(computedInputValue.value, item.raw);
+        }
+
+        if (props.checkStrictly) {
+          return getFilteredStatus(item.label);
+        }
+
+        return item.path?.find((leaf) => getFilteredStatus(leaf.label));
+      });
     });
 
     const updateValue = (values: UnionType[] | UnionType[][]) => {
@@ -660,6 +681,17 @@ export default defineComponent({
       emit('change', value);
       eventHandlers.value?.onChange?.();
     };
+
+    watch([multiple, pathMode], () => {
+      const values: any[] = [];
+      computedValueMap.value.forEach((value, key) => {
+        const option = leafOptionMap.get(key);
+        if (option) {
+          values.push(pathMode.value ? option.pathValue : option.value);
+        }
+      });
+      updateValue(values);
+    });
 
     const handlePopupVisibleChange = (visible: boolean): void => {
       if (computedPopupVisible.value !== visible) {

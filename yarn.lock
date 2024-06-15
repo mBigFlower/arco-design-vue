@@ -427,26 +427,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@arco-design/arco-site-utils@npm:^1.0.2":
-  version: 1.0.2
-  resolution: "@arco-design/arco-site-utils@npm:1.0.2"
-  dependencies:
-    axios: ^0.24.0
-    lodash.throttle: ^4.1.1
-  peerDependencies:
-    "@arco-design/web-react": ">=2.0.0"
-    react: ">=16"
-    react-dom: ^16.0.1
-  checksum: c1708a1e8b143fdef14a87e1067491b09a8198e66ddcdce616e3b8e539a93ad3e9133def7045274326e91a2c338ebb36e26ed2e05325f83637577b44d864f50e
-  languageName: node
-  linkType: hard
-
 "@arco-design/arco-vue-docs-navbar@^0.2.0, @arco-design/arco-vue-docs-navbar@workspace:packages/arco-vue-docs-navbar":
   version: 0.0.0-use.local
   resolution: "@arco-design/arco-vue-docs-navbar@workspace:packages/arco-vue-docs-navbar"
   dependencies:
     "@arco-design/web-react": ^2.28.2
-    "@arco-materials/site-navbar-new": ^1.1.3
+    "@arco-materials/site-navbar-new": ^1.2.9
     "@svgr/core": ^5.5.0
     "@typescript-eslint/eslint-plugin": ^4.18.0
     "@typescript-eslint/parser": ^4.12.0
@@ -470,10 +456,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@arco-design/arco-vue-docs@workspace:packages/arco-vue-docs"
   dependencies:
-    "@arco-design/arco-site-utils": ^1.0.2
     "@arco-design/arco-vue-docs-navbar": ^0.2.0
     "@arco-design/arco-vue-scripts": ^0.2.1
     "@arco-design/web-vue": ^2.38.0
+    "@arco-materials/site-utils": ^1.2.0
     "@stackblitz/sdk": ^1.6.0
     "@types/nprogress": ^0.2.0
     "@typescript-eslint/eslint-plugin": ^4.18.0
@@ -658,7 +644,7 @@ __metadata:
     "@vue/babel-plugin-jsx": ^1.0.6
     "@vue/test-utils": ^2.0.0-beta.14
     b-tween: ^0.3.3
-    b-validate: ^1.3.1
+    b-validate: ^1.4.4
     compute-scroll-into-view: ^1.0.17
     dayjs: ^1.10.3
     eslint: ^7.21.0
@@ -685,9 +671,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@arco-materials/site-navbar-new@npm:^1.1.3":
-  version: 1.1.3
-  resolution: "@arco-materials/site-navbar-new@npm:1.1.3"
+"@arco-materials/site-navbar-new@npm:^1.2.9":
+  version: 1.2.9
+  resolution: "@arco-materials/site-navbar-new@npm:1.2.9"
   dependencies:
     "@antv/g2": ^4.1.12
     "@arco-materials/site-utils": ^1.2.0
@@ -702,7 +688,7 @@ __metadata:
     "@arco-design/web-react": ">=2.0.0"
     react: ">=16"
     react-dom: ^16.0.1
-  checksum: a80f344e531b2b1a22a475304f907c3743206ce7f0b12d936d6faf2273e1c42017d47f99eab29342ec35d09c628d4d40fbbdb0c9fe866062f02ebf604799b4b5
+  checksum: 9bf03b7b39e9e12d5c38875882af05960b741a2572ebc31060831ac6234af46d5bbf376327d789487fbb476c9bfa2439c4a25596c2a7f7d7e39aa4294d354187
   languageName: node
   linkType: hard
 
@@ -7185,12 +7171,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"b-validate@npm:^1.3.0, b-validate@npm:^1.3.1":
+"b-validate@npm:^1.3.0":
   version: 1.3.1
   resolution: "b-validate@npm:1.3.1"
   dependencies:
     lodash.isequal: ^4.5.0
   checksum: 121ebd4af02092d0e850ebed6ce05da6ad212868d3113a58584d1d1a38edca29957b4214c038bcf7eb715474f3bddf9bf9492dbcbd0e858ce396fac0e31c5e8f
+  languageName: node
+  linkType: hard
+
+"b-validate@npm:^1.4.4":
+  version: 1.4.4
+  resolution: "b-validate@npm:1.4.4"
+  checksum: 4f4ec4ffc3a9787f27bbaa8297e2d25681460bd7ecbfdad001a13b4d31a2ba18f2bc2479fcc83e45b9f608a28f48271e9887fe05fb8ea084d181adcad50923f8
   languageName: node
   linkType: hard
 

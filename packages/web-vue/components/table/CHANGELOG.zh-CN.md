@@ -2,6 +2,116 @@
 changelog: true
 ```
 
+## 2.55.3
+
+`2024-06-07`
+
+### 🆕 新增功能
+
+- column 增加 minWidth 属性 ([#3157](https://github.com/arco-design/arco-design-vue/pull/3157))
+
+### 🐛 问题修复
+
+- 修复虚拟滚动条开启时 sticky-header 吸顶失效 ([#3170](https://github.com/arco-design/arco-design-vue/pull/3170))
+- table动态切换row-selection时恢复默认样式 ([#3155](https://github.com/arco-design/arco-design-vue/pull/3155))
+
+
+## 2.54.4
+
+`2024-02-02`
+
+### 🐛 问题修复
+
+- 修复表格虚拟列表下不显示 empty  问题 ([#2949](https://github.com/arco-design/arco-design-vue/pull/2949))
+
+
+## 2.54.2
+
+`2024-01-11`
+
+### 🐛 问题修复
+
+- 修复 `span-method` 在超出行列数后报错的问题 ([#2914](https://github.com/arco-design/arco-design-vue/pull/2914))
+
+
+## 2.51.0
+
+`2023-09-01`
+
+### 🆕 新增功能
+
+- 支持显示空子树 ([#2673](https://github.com/arco-design/arco-design-vue/pull/2673))
+
+
+## 2.49.2
+
+`2023-07-28`
+
+### 🐛 问题修复
+
+- 修复在固定列中开启调整列宽出现的问题 ([#2598](https://github.com/arco-design/arco-design-vue/pull/2598))
+- 修复树形表格拖拽问题 ([#2503](https://github.com/arco-design/arco-design-vue/pull/2503))
+
+
+## 2.49.0
+
+`2023-07-21`
+
+### 🐛 问题修复
+
+- 修复 rowClass 函数 record 参数错误的问题 ([#2570](https://github.com/arco-design/arco-design-vue/pull/2570))
+
+
+## 2.48.1
+
+`2023-07-14`
+
+### 🐛 问题修复
+
+- 修复 `summary-span-method` 属性中传出参数错误的问题 ([#2552](https://github.com/arco-design/arco-design-vue/pull/2552))
+- 修复子树的合并单元格的bug ([#2540](https://github.com/arco-design/arco-design-vue/pull/2540))
+
+
+## 2.48.0
+
+`2023-06-30`
+
+### 🆕 新增功能
+
+- 单元格新增鼠标移入移出事件 ([#2489](https://github.com/arco-design/arco-design-vue/pull/2489))
+
+### 🐛 问题修复
+
+- 增加headerCell下调整列宽高亮 ([#2519](https://github.com/arco-design/arco-design-vue/pull/2519))
+
+
+## 2.46.1
+
+`2023-05-26`
+
+### 💎 功能优化
+
+- 增加表格右击、双击的相关事件 ([#2452](https://github.com/arco-design/arco-design-vue/pull/2452))
+
+
+## 2.46.0
+
+`2023-05-12`
+
+### 🐛 问题修复
+
+- 修复当 dataIndex 为路径格式时，排序和总结栏功能不生效的问题 ([#2413](https://github.com/arco-design/arco-design-vue/pull/2413))
+
+
+## 2.45.1
+
+`2023-04-14`
+
+### 💅 样式更新
+
+- 修复虚拟列表下显示横向滚动条的问题 ([#2337](https://github.com/arco-design/arco-design-vue/pull/2337))
+
+
 ## 2.41.1
 
 `2023-01-06`

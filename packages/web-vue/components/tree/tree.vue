@@ -7,7 +7,10 @@
       :data="visibleTreeNodeList"
     >
       <template #item="{ item: node }">
-        <TreeNode :key="node.key" v-bind="node.treeNodeProps" />
+        <TreeNode
+          :key="`${searchValue}-${node.key}`"
+          v-bind="node.treeNodeProps"
+        />
       </template>
     </VirtualList>
     <template v-else>
@@ -237,6 +240,10 @@ export default defineComponent({
     filterTreeNode: {
       type: Function as PropType<FilterTreeNode>,
     },
+    searchValue: {
+      type: String,
+      default: '',
+    },
     /**
      * @zh 传递虚拟列表属性，传入此参数以开启虚拟滚动，[VirtualListProps](#VirtualListProps)
      * @en Pass virtual list properties, pass in this parameter to turn on virtual scrolling, [VirtualListProps](#VirtualListProps)
@@ -365,6 +372,8 @@ export default defineComponent({
     /**
      * @zh 节点开始拖拽
      * @en Node starts dragging
+     * @param {DragEvent} ev
+     * @param {TreeNodeData} node
      */
     'dragStart': (ev: DragEvent, node: TreeNodeData) => true,
     /**
@@ -432,6 +441,7 @@ export default defineComponent({
    * @zh 标题
    * @en Title
    * @slot title
+   * @binding {string} title
    */
   setup(props, { emit, slots }) {
     const {
@@ -635,6 +645,8 @@ export default defineComponent({
         ? key2TreeNode.value.get(targetKey)
         : undefined;
       const publicCheckedKeys = getPublicCheckedKeys(newCheckedKeys);
+      emit('update:checkedKeys', publicCheckedKeys);
+      emit('update:halfCheckedKeys', newIndeterminateKeys);
       emit('check', publicCheckedKeys, {
         checked: targetChecked,
         node: targetNode?.treeNodeData,
@@ -643,8 +655,6 @@ export default defineComponent({
         halfCheckedNodes: getNodes(newIndeterminateKeys) as TreeNodeData[],
         e: event,
       });
-      emit('update:checkedKeys', publicCheckedKeys);
-      emit('update:halfCheckedKeys', newIndeterminateKeys);
     }
 
     function emitSelectEvent(options: {
@@ -657,13 +667,13 @@ export default defineComponent({
       const targetNode = targetKey
         ? key2TreeNode.value.get(targetKey)
         : undefined;
+      emit('update:selectedKeys', newSelectedKeys);
       emit('select', newSelectedKeys, {
         selected: targetSelected,
         node: targetNode?.treeNodeData,
         selectedNodes: getNodes(newSelectedKeys) as TreeNodeData[],
         e: event,
       });
-      emit('update:selectedKeys', newSelectedKeys);
     }
 
     function emitExpandEvent(options: {

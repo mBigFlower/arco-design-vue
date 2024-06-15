@@ -1,4 +1,5 @@
-import { AppContext, CSSProperties } from 'vue';
+import { AppContext, CSSProperties, StyleValue } from 'vue';
+import { ButtonProps } from '../button';
 import { RenderContent } from '../_utils/types';
 
 export interface ModalConfig {
@@ -21,6 +22,7 @@ export interface ModalConfig {
   /**
    * @zh 是否显示关闭按钮
    * @en Whether to show the close button
+   * @defaultValue true
    */
   closable?: boolean;
   /**
@@ -37,12 +39,12 @@ export interface ModalConfig {
    * @zh 确认按钮的Props
    * @en Props of confirm button
    */
-  okButtonProps?: any;
+  okButtonProps?: ButtonProps;
   /**
    * @zh 取消按钮的Props
    * @en Props of cancel button
    */
-  cancelButtonProps?: any;
+  cancelButtonProps?: ButtonProps;
   /**
    * @zh 确认按钮是否为加载中状态
    * @en Whether the confirm button is in the loading state
@@ -56,6 +58,7 @@ export interface ModalConfig {
   /**
    * @zh 是否显示遮罩层
    * @en Whether to show the mask
+   * @defaultValue true
    */
   mask?: boolean;
   /**
@@ -66,6 +69,7 @@ export interface ModalConfig {
   /**
    * @zh 是否点击遮罩层可以关闭对话框
    * @en Whether to close the modal when click the mask
+   * @defaultValue true
    */
   maskClosable?: boolean;
   /**
@@ -76,11 +80,13 @@ export interface ModalConfig {
   /**
    * @zh 对话框是否居中显示
    * @en Whether the dialog box is displayed in the center
+   * @defaultValue true
    */
   alignCenter?: boolean;
   /**
    * @zh 是否支持 ESC 键关闭对话框
    * @en Whether to support the ESC key to close the dialog
+   * @defaultValue true
    * @version 2.15.0
    */
   escToClose?: boolean;
@@ -100,12 +106,12 @@ export interface ModalConfig {
    * @zh 点击确定按钮的回调函数
    * @en Callback function for clicking the OK button
    */
-  onOk?: () => void;
+  onOk?: (e?: Event) => void;
   /**
    * @zh 点击取消按钮的回调函数
    * @en Callback function for clicking the Cancel button
    */
-  onCancel?: () => void;
+  onCancel?: (e?: Event) => void;
   /**
    * @zh 触发 ok 事件前的回调函数。如果返回 false 则不会触发后续事件，也可使用 done 进行异步关闭。
    * @en The callback function before the ok event is triggered. If false is returned, subsequent events will not be triggered, and done can also be used to close asynchronously.
@@ -157,17 +163,20 @@ export interface ModalConfig {
   /**
    * @zh 标题的水平对齐方向
    * @en horizontal alignment of the title
+   * @defaultValue 'center'
    * @version 2.17.0
    */
   titleAlign?: 'start' | 'center';
   /**
    * @zh 对话框是否挂载在 `body` 元素下
    * @en Whether the modal is mounted under the `body` element
+   * @defaultValue true
    */
   renderToBody?: boolean;
   /**
    * @zh 弹出框的挂载容器
    * @en Mount container for modal
+   * @defaultValue 'body'
    */
   popupContainer?: string | HTMLElement;
   /**
@@ -192,6 +201,23 @@ export interface ModalConfig {
    * @version 2.24.0
    */
   modalAnimationName?: string;
+  /**
+   * @zh 是否隐藏标题
+   * @en Whether to hide the title
+   * @defaultValue false
+   * @version 2.50.0
+   */
+  hideTitle?: boolean;
+  /**
+   * @zh 对话框内容部分的类名
+   * @en The classname of the modal
+   */
+  bodyClass?: string | any[];
+  /**
+   * @zh 对话框内容部分的样式
+   * @en Modal style
+   */
+  bodyStyle?: StyleValue;
 }
 
 export type ModalUpdateConfig = Omit<

@@ -2,6 +2,42 @@
 changelog: true
 ```
 
+## 2.55.1
+
+`2024-03-29`
+
+### 🐛 BugFix
+
+- fix animation direction for position popup ([#3045](https://github.com/arco-design/arco-design-vue/pull/3045))
+
+
+## 2.46.0
+
+`2023-05-12`
+
+### 🆕 Feature
+
+- add scrollToClose prop ([#2414](https://github.com/arco-design/arco-design-vue/pull/2414))
+
+
+## 2.44.7
+
+`2023-04-03`
+
+### 🐛 BugFix
+
+- Fix the problem of reporting errors in iframe ([#2300](https://github.com/arco-design/arco-design-vue/pull/2300))
+
+
+## 2.44.6
+
+`2023-03-31`
+
+### 💎 Enhancement
+
+- Optimize the problem that the popup position is not accurate in ShadowRoot ([#2273](https://github.com/arco-design/arco-design-vue/pull/2273))
+
+
 ## 2.38.0-beta.2
 
 `2022-10-21`

@@ -2,6 +2,24 @@
 changelog: true
 ```
 
+## 2.55.0
+
+`2024-03-15`
+
+### 💅 样式更新
+
+- 修复 title 过渡动画效果 ([#3008](https://github.com/arco-design/arco-design-vue/pull/3008))
+
+
+## 2.45.1
+
+`2023-04-14`
+
+### 🐛 问题修复
+
+- 修复个别情况下tab-pane 的title 插槽不更新的问题 ([#2325](https://github.com/arco-design/arco-design-vue/pull/2325))
+
+
 ## 2.43.0
 
 `2023-02-10`

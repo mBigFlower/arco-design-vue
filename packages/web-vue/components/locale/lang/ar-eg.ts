@@ -102,6 +102,7 @@ const lang: ArcoLang = {
     dragHover: 'حرر الملف وابدأ في التحميل',
     error: 'التحميل فشل',
   },
+  calendar: calendarLang,
   datePicker: {
     view: calendarLang.view,
     month: calendarLang.month,
@@ -144,6 +145,11 @@ const lang: ArcoLang = {
     edit: 'تعديل',
     collapse: 'يطوى',
     expand: 'وسعت',
+  },
+  colorPicker: {
+    history: 'ألوان تاريخية',
+    preset: 'ألوان النظام المضبوطة مسبقاً',
+    empty: 'غير متوفرة',
   },
 };
 

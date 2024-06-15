@@ -22,6 +22,8 @@ description: A form with data collection, verification and submission functions,
 
 @import ./__demo__/validation.md
 
+@import ./__demo__/validation2.md
+
 @import ./__demo__/status.md
 
 @import ./__demo__/dynamic.md
@@ -31,6 +33,8 @@ description: A form with data collection, verification and submission functions,
 @import ./__demo__/async.md
 
 @import ./__demo__/custom.md
+
+@import ./__demo__/scroll.md
 
 ## API
 
@@ -48,6 +52,7 @@ description: A form with data collection, verification and submission functions,
 |disabled|Whether to disable the form|`boolean`|`-`||
 |rules|Form item validation rules|`Record<string, FieldRule \| FieldRule[]>`|`-`||
 |auto-label-width|Whether to enable automatic label width, it only takes effect under `layout="horizontal"`.|`boolean`|`false`|2.13.0|
+|scroll-to-first-error|Scroll to the first error field after verification fails|`boolean`|`false`|2.51.0|
 ### `<form>` Events
 
 |Event Name|Description|Parameters|
@@ -57,13 +62,14 @@ description: A form with data collection, verification and submission functions,
 |submit-failed|Triggered when verification failed|data: `{values: Record<string, any>; errors: Record<string, ValidatedError>}`<br>ev: `Event`|
 ### `<form>` Methods
 
-|Method|Description|Parameters|Return|
-|---|---|---|:---:|
-|validate|Verify all form data|callback: `(errors: undefined \| Record<string, ValidatedError>) => void`|Promise<undefined \| Record<string, ValidatedError>>|
-|validateField|Validate part of the form data|field: `string \| string[]`<br>callback: `(errors: undefined \| Record<string, ValidatedError>) => void`|Promise<undefined \| Record<string, ValidatedError>>|
-|resetFields|Reset form data|field: `string \| string[]`|-|
-|clearValidate|Clear verification status|field: `string \| string[]`|-|
-|setFields|Set the value and status of the form item|data: `Record<string, FieldData>`|-|
+|Method|Description|Parameters|Return|version|
+|---|---|---|:---:|:---|
+|validate|Verify all form data|callback: `(errors: undefined \| Record<string, ValidatedError>) => void`|Promise<undefined \| Record<string, ValidatedError>>||
+|validateField|Validate part of the form data|field: `string \| string[]`<br>callback: `(errors: undefined \| Record<string, ValidatedError>) => void`|Promise<undefined \| Record<string, ValidatedError>>||
+|resetFields|Reset form data|field: `string \| string[]`|-||
+|clearValidate|Clear verification status|field: `string \| string[]`|-||
+|setFields|Set the value and status of the form item|data: `Record<string, FieldData>`|-||
+|scrollToField|Scroll to the specified form item|field: `string`|-|2.51.0|
 
 
 
@@ -191,6 +197,7 @@ const useFormItem = (data: {
 }
 ```
 
+
 ## FAQ
 
 ### About the `field` attribute of `form-item`
@@ -212,3 +219,8 @@ const data = reactive({
 })
 ````
 At this point, if you want to specify the value corresponding to the current `form-item` as `id: '2222'`, you need to set `field="people.2.id"`, and the separator in the value needs to use `.`
+
+### About using clickable elements in the label slot
+
+The title area of the form component is wrapped with the `label` element by default, which will activate the input component when clicked. If you put a clickable component in it, it will affect its normal function.
+At this point, you can use the `label-component` attribute to modify the wrapping element to `span` to solve this problem.

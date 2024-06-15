@@ -2,6 +2,24 @@
 changelog: true
 ```
 
+## 2.48.0
+
+`2023-06-30`
+
+### 🆕 新增功能
+
+- 增加 `exchangeTime` 属性 ([#2529](https://github.com/arco-design/arco-design-vue/pull/2529))
+
+
+## 2.47.0
+
+`2023-06-02`
+
+### 🆕 新增功能
+
+- empty slots 增加component 属性 ([#2448](https://github.com/arco-design/arco-design-vue/pull/2448))
+
+
 ## 2.28.0
 
 `2022-05-20`

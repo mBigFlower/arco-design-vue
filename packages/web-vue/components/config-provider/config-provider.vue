@@ -59,11 +59,30 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    /**
+     * @zh 是否在滚动时关闭弹出框
+     * @en Whether to close the popover when scrolling
+     * @version 2.46.0
+     */
+    scrollToClose: {
+      type: Boolean,
+      default: false,
+    },
+    /**
+     * @zh 是否交换时间
+     * @en Whether to exchange time
+     * @version 2.48.0
+     */
+    exchangeTime: {
+      type: Boolean,
+      default: true,
+    },
   },
   /**
    * @zh 自定义空状态元素
    * @en Custom empty element
    * @slot empty
+   * @binding {string} component
    * @version 2.28.0
    */
   /**
@@ -73,7 +92,14 @@ export default defineComponent({
    * @version 2.28.0
    */
   setup(props, { slots }) {
-    const { prefixCls, locale, size, updateAtScroll } = toRefs(props);
+    const {
+      prefixCls,
+      locale,
+      size,
+      updateAtScroll,
+      scrollToClose,
+      exchangeTime,
+    } = toRefs(props);
 
     const config = reactive({
       slots,
@@ -81,6 +107,8 @@ export default defineComponent({
       locale,
       size,
       updateAtScroll,
+      scrollToClose,
+      exchangeTime,
     });
 
     if (props.global) {

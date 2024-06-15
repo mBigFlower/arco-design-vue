@@ -102,6 +102,7 @@ const lang: ArcoLang = {
     dragHover: 'ปล่อยเพื่ออัปโหลด',
     error: 'ข้อผิดพลาดในการอัปโหลด',
   },
+  calendar: calendarLang,
   datePicker: {
     view: calendarLang.view,
     month: calendarLang.month,
@@ -144,6 +145,11 @@ const lang: ArcoLang = {
     edit: 'แก้ไข',
     collapse: 'พับ',
     expand: 'แฉ',
+  },
+  colorPicker: {
+    history: 'สีที่ใช้ล่าสุด',
+    preset: 'สี ที่ตั้งไว้สำหรับระบบ',
+    empty: 'ไม่มีข้อมูล',
   },
 };
 

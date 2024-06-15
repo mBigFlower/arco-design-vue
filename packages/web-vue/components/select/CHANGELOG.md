@@ -2,6 +2,106 @@
 changelog: true
 ```
 
+## 2.54.2
+
+`2024-01-11`
+
+### 💎 Enhancement
+
+- enhance selected state style for options ([#2895](https://github.com/arco-design/arco-design-vue/pull/2895))
+
+
+## 2.54.1
+
+`2023-12-28`
+
+### 🐛 BugFix
+
+- Fix `defaultPopupVisible` failure problem ([#2881](https://github.com/arco-design/arco-design-vue/pull/2881))
+
+
+## 2.51.0
+
+`2023-09-01`
+
+### 🆕 Feature
+
+- support boolean type ([#2661](https://github.com/arco-design/arco-design-vue/pull/2661))
+
+
+## 2.47.1
+
+`2023-06-09`
+
+### 🐛 BugFix
+
+- Fix mouse cursor positioning issue in search mode ([#2487](https://github.com/arco-design/arco-design-vue/pull/2487))
+
+
+## 2.47.0
+
+`2023-06-02`
+
+### 🆕 Feature
+
+- the header and footer are displayed in the empty state of select ([#2429](https://github.com/arco-design/arco-design-vue/pull/2429))
+
+
+## 2.46.0
+
+`2023-05-12`
+
+### 💎 Enhancement
+
+- Add a title hint to the selection box ([#2412](https://github.com/arco-design/arco-design-vue/pull/2412))
+
+
+## 2.45.3
+
+`2023-04-28`
+
+### 🐛 BugFix
+
+- Fix the problem that the Enter key in the input method state will trigger the selection ([#2378](https://github.com/arco-design/arco-design-vue/pull/2378))
+
+
+## 2.45.2
+
+`2023-04-21`
+
+### 💅 Style
+
+- Fix the inconsistent line-height and height of select-view-input ([#2346](https://github.com/arco-design/arco-design-vue/pull/2346))
+
+
+## 2.44.6
+
+`2023-03-31`
+
+### 🐛 BugFix
+
+- Fix the problem that setting modelValue to undefined is invalid ([#2285](https://github.com/arco-design/arco-design-vue/pull/2285))
+
+
+## 2.44.3
+
+`2023-03-24`
+
+### 🐛 BugFix
+
+- fix blank dropdown caused by dynamic slot options ([#2265](https://github.com/arco-design/arco-design-vue/pull/2265))
+- Automatic creation of empty string entries is not allowed. Dropdown option with empty string, set value to `undefined` when empty ([#2257](https://github.com/arco-design/arco-design-vue/pull/2257))
+
+
+## 2.44.2
+
+`2023-03-17`
+
+### 🐛 BugFix
+
+- drop-down option value supports empty string ([#2190](https://github.com/arco-design/arco-design-vue/pull/2190))
+
+
 ## 2.43.0
 
 `2023-02-10`

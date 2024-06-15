@@ -8,6 +8,8 @@ export interface ConfigProvider {
   locale?: ArcoLang;
   size?: Size;
   updateAtScroll?: boolean;
+  scrollToClose?: boolean;
+  exchangeTime?: boolean;
 }
 
 export const configProviderInjectionKey: InjectionKey<ConfigProvider> =

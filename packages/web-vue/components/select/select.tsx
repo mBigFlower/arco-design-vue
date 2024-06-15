@@ -16,9 +16,16 @@ import {
   isNull,
   isNumber,
   isObject,
+  isString,
+  isBoolean,
   isUndefined,
 } from '../_utils/is';
-import { getKeyFromValue, isGroupOptionInfo, isValidOption } from './utils';
+import {
+  getKeyFromValue,
+  isGroupOptionInfo,
+  isValidOption,
+  hasEmptyStringKey,
+} from './utils';
 import Trigger, { TriggerProps } from '../trigger';
 import SelectView from '../_components/select-view/select-view';
 import { Size } from '../_utils/constant';
@@ -73,12 +80,14 @@ export default defineComponent({
      * @en Value
      */
     modelValue: {
-      type: [String, Number, Object, Array] as PropType<
+      type: [String, Number, Boolean, Object, Array] as PropType<
         | string
         | number
+        | boolean
         | Record<string, any>
-        | (string | number | Record<string, any>)[]
+        | (string | number | boolean | Record<string, any>)[]
       >,
+      default: undefined,
     },
     /**
      * @zh 默认值（非受控模式）
@@ -86,11 +95,12 @@ export default defineComponent({
      * @defaultValue '' \| []
      */
     defaultValue: {
-      type: [String, Number, Object, Array] as PropType<
+      type: [String, Number, Boolean, Object, Array] as PropType<
         | string
         | number
+        | boolean
         | Record<string, unknown>
-        | (string | number | Record<string, unknown>)[]
+        | (string | number | boolean | Record<string, unknown>)[]
       >,
       default: (props: Data) => (isUndefined(props.multiple) ? '' : []),
     },
@@ -248,7 +258,7 @@ export default defineComponent({
      */
     options: {
       type: Array as PropType<
-        (string | number | SelectOptionData | SelectOptionGroup)[]
+        (string | number | boolean | SelectOptionData | SelectOptionGroup)[]
       >,
       default: () => [],
     },
@@ -284,7 +294,7 @@ export default defineComponent({
       type: [Boolean, Function] as PropType<
         | boolean
         | ((
-            value: string | number | Record<string, unknown>
+            value: string | number | boolean | Record<string, unknown>
           ) => SelectOptionData)
       >,
       default: true,
@@ -342,28 +352,46 @@ export default defineComponent({
       type: [Boolean, Object] as PropType<boolean | ScrollbarProps>,
       default: true,
     },
+    /**
+     * @zh 空状态时是否显示header
+     * @en Whether to display the header in the empty state
+     */
+    showHeaderOnEmpty: {
+      type: Boolean as PropType<boolean>,
+      default: false,
+    },
+    /**
+     * @zh 空状态时是否显示footer
+     * @en Whether to display the footer in the empty state
+     */
+    showFooterOnEmpty: {
+      type: Boolean as PropType<boolean>,
+      default: false,
+    },
   },
   emits: {
     'update:modelValue': (
       value:
         | string
         | number
+        | boolean
         | Record<string, any>
-        | (string | number | Record<string, any>)[]
+        | (string | number | boolean | Record<string, any>)[]
     ) => true,
     'update:inputValue': (inputValue: string) => true,
     'update:popupVisible': (visible: boolean) => true,
     /**
      * @zh 值发生改变时触发
      * @en Triggered when the value changes
-     * @param { string | number | Record<string, any> | (string | number | Record<string, any>)[] } value
+     * @param { string | number | boolean | Record<string, any> | (string | number | boolean | Record<string, any>)[] } value
      */
     'change': (
       value:
         | string
         | number
+        | boolean
         | Record<string, any>
-        | (string | number | Record<string, any>)[]
+        | (string | number | boolean | Record<string, any>)[]
     ) => true,
     /**
      * @zh 输入框的值发生改变时触发
@@ -385,10 +413,11 @@ export default defineComponent({
     /**
      * @zh 点击标签的删除按钮时触发
      * @en Triggered when the delete button of the label is clicked
-     * @param {string | number | Record<string, any> | undefined} removed
+     * @param {string | number | boolean | Record<string, any> | undefined} removed
      */
-    'remove': (removed: string | number | Record<string, any> | undefined) =>
-      true,
+    'remove': (
+      removed: string | number | boolean | Record<string, any> | undefined
+    ) => true,
     /**
      * @zh 用户搜索时触发
      * @en Triggered when the user searches
@@ -408,12 +437,12 @@ export default defineComponent({
     /**
      * @zh 多选超出限制时触发
      * @en Triggered when multiple selection exceeds the limit
-     * @param {string | number | Record<string, any> | undefined} value
+     * @param {string | number | boolean | Record<string, any> | undefined} value
      * @param {Event} ev
      * @version 2.18.0
      */
     'exceedLimit': (
-      value: string | number | Record<string, any> | undefined,
+      value: string | number | boolean | Record<string, any> | undefined,
       ev: Event
     ) => true,
   },
@@ -486,6 +515,7 @@ export default defineComponent({
       valueKey,
       multiple,
       popupVisible,
+      defaultPopupVisible,
       showExtraOptions,
       modelValue,
       fieldNames,
@@ -524,6 +554,7 @@ export default defineComponent({
     // trigger
     const { computedPopupVisible, handlePopupVisibleChange } = useTrigger({
       popupVisible,
+      defaultPopupVisible,
       emit,
     });
 
@@ -533,7 +564,10 @@ export default defineComponent({
       const mergedValue = props.modelValue ?? _value.value;
       const valueArray = isArray(mergedValue)
         ? mergedValue
-        : mergedValue || isNumber(mergedValue)
+        : mergedValue ||
+          isNumber(mergedValue) ||
+          isString(mergedValue) ||
+          isBoolean(mergedValue)
         ? [mergedValue]
         : [];
       return valueArray.map((value) => ({
@@ -543,7 +577,7 @@ export default defineComponent({
     });
     watch(modelValue, (value) => {
       if (isUndefined(value) || isNull(value)) {
-        _value.value = multiple.value ? [] : '';
+        _value.value = multiple.value ? [] : (value as any);
       }
     });
 
@@ -574,7 +608,7 @@ export default defineComponent({
 
     // extra value and option
     const getFallBackOption = (
-      value: string | number | Record<string, unknown>
+      value: string | number | boolean | Record<string, unknown>
     ): SelectOptionData => {
       if (isFunction(props.fallbackOption)) {
         return props.fallbackOption(value);
@@ -593,7 +627,7 @@ export default defineComponent({
 
       if (props.allowCreate || props.fallbackOption) {
         for (const item of computedValueObjects.value) {
-          if (!keyArray.includes(item.key)) {
+          if (!keyArray.includes(item.key) && item.value !== '') {
             const optionInfo = optionInfoMap.get(item.key);
             if (!optionInfo || optionInfo.origin === 'extraOptions') {
               valueArray.push(item);
@@ -665,7 +699,12 @@ export default defineComponent({
     // update func
     const getValueFromValueKeys = (valueKeys: string[]) => {
       if (!props.multiple) {
-        return optionInfoMap.get(valueKeys[0])?.value ?? '';
+        return (
+          optionInfoMap.get(valueKeys[0])?.value ??
+          (hasEmptyStringKey(optionInfoMap)
+            ? (undefined as unknown as string)
+            : '')
+        );
       }
       return valueKeys.map((key) => optionInfoMap.get(key)?.value ?? '');
     };
@@ -899,6 +938,8 @@ export default defineComponent({
           empty={validOptionInfos.value.length === 0}
           virtualList={Boolean(props.virtualListProps)}
           scrollbar={props.scrollbar}
+          showHeaderOnEmpty={props.showHeaderOnEmpty}
+          showFooterOnEmpty={props.showFooterOnEmpty}
           onScroll={handleDropdownScroll}
           onReachBottom={handleDropdownReachBottom}
         />

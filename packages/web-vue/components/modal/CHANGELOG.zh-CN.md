@@ -2,6 +2,73 @@
 changelog: true
 ```
 
+## 2.54.6
+
+`2024-03-01`
+
+### 💅 样式更新
+
+- 修复遮罩层 fade-modal 过渡动画在进入时不生效问题 ([#3007](https://github.com/arco-design/arco-design-vue/pull/3007))
+
+
+## 2.50.0
+
+`2023-08-11`
+
+### 💎 功能优化
+
+- 增加 `hide-title` 属性，支持隐藏标题 ([#2605](https://github.com/arco-design/arco-design-vue/pull/2605))
+
+### 🆎 类型修正
+
+- 补全 ModalConfig 缺失的属性 ([#2628](https://github.com/arco-design/arco-design-vue/pull/2628))
+
+
+## 2.50.0
+
+`2023-8-1`
+
+### 💎 功能优化
+
+- 增加 `hide-title` 属性，支持隐藏标题 ([#2605](https://github.com/arco-design/arco-design-vue/pull/2605))
+
+## 2.47.0
+
+`2023-06-02`
+
+### ⚠️ 重点注意
+
+- 修复Modal.confirm标题缺少warning icon的问题 ([#2465](https://github.com/arco-design/arco-design-vue/pull/2465))
+
+
+## 2.46.2
+
+`2023-05-31`
+
+### 🐛 问题修复
+
+- 修复modal组件不能设置width属性的问题 ([#2467](https://github.com/arco-design/arco-design-vue/pull/2467))
+
+
+## 2.46.1
+
+`2023-05-26`
+
+### 🐛 问题修复
+
+- 修复定义了top属性时拖拽错误 ([#2446](https://github.com/arco-design/arco-design-vue/pull/2446))
+- 修复同时设置 `width` 和 `fullscreen` 时，没有全屏的问题 ([#2441](https://github.com/arco-design/arco-design-vue/pull/2441))
+
+### 🆎 类型修正
+
+- 修复函数调用形式ts报错 ([#2426](https://github.com/arco-design/arco-design-vue/pull/2426))
+
+
+## 2.45.2
+
+`2023-04-21`
+
+
 ## 2.43.2
 
 `2023-02-24`

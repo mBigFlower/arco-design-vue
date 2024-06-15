@@ -45,7 +45,15 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, nextTick, ref, toRefs } from 'vue';
+import {
+  computed,
+  defineComponent,
+  nextTick,
+  ref,
+  toRefs,
+  watch,
+  reactive,
+} from 'vue';
 import { useSize } from './hooks/use-size';
 import VirtualListItem from './virtual-list-item';
 import { getPrefixCls } from '../../_utils/global-config';
@@ -168,10 +176,12 @@ export default defineComponent({
     const onScroll = (ev: Event) => {
       const { scrollTop, scrollHeight, offsetHeight } =
         ev.target as HTMLElement;
-
       const _start = getStartByScroll(scrollTop);
       if (_start !== start.value) {
         setStart(_start);
+        nextTick(() => {
+          scrollTo(scrollTop);
+        });
       }
       emit('scroll', ev);
       const bottom = Math.floor(scrollHeight - (scrollTop + offsetHeight));

@@ -28,7 +28,7 @@
         :disabled="mergedDisabled"
         :opened="panelVisible"
         :error="error"
-        :border="border"
+        :bordered="border"
         :placeholder="placeholder"
         :multiple="isMultiple"
         v-bind="$attrs"
@@ -47,14 +47,27 @@
     </slot>
     <template #content>
       <div
-        :class="[`${prefixCls}-popup`, dropdownClassName]"
+        :class="[
+          `${prefixCls}-popup`,
+          {
+            [`${prefixCls}-has-header`]: Boolean($slots.header),
+            [`${prefixCls}-has-footer`]: Boolean($slots.footer),
+          },
+          dropdownClassName,
+        ]"
         :style="computedDropdownStyle"
       >
+        <div
+          v-if="$slots.header && (!isEmpty || showHeaderOnEmpty)"
+          :class="`${prefixCls}-header`"
+        >
+          <slot name="header" />
+        </div>
         <slot v-if="loading" name="loader">
           <Spin />
         </slot>
-        <slot v-else-if="isEmptyTreeData || isEmptyFilterResult" name="empty">
-          <Empty />
+        <slot v-else-if="isEmpty" name="empty">
+          <component :is="TreeSelectEmpty ? TreeSelectEmpty : 'Empty'" />
         </slot>
         <Panel
           v-else
@@ -75,10 +88,17 @@
             size,
             checkable: isCheckable,
             selectable: isSelectable,
+            searchValue: searchValue,
           }"
           :tree-slots="pickSubCompSlots($slots, 'tree')"
           @change="onSelectChange"
         />
+        <div
+          v-if="$slots.footer && (!isEmpty || showFooterOnEmpty)"
+          :class="`${prefixCls}-footer`"
+        >
+          <slot name="footer" />
+        </div>
       </div>
     </template>
   </Trigger>
@@ -94,6 +114,7 @@ import {
   ref,
   toRefs,
   StyleValue,
+  inject,
 } from 'vue';
 import useMergeState from '../_hooks/use-merge-state';
 import { LabelValue } from './interface';
@@ -101,6 +122,7 @@ import Trigger, { TriggerProps } from '../trigger';
 import SelectView from '../_components/select-view/select-view';
 import Panel from './panel';
 import { getPrefixCls } from '../_utils/global-config';
+import { configProviderInjectionKey } from '../config-provider/context';
 import useSelectedState from './hooks/use-selected-state';
 import useTreeData from '../tree/hooks/use-tree-data';
 import {
@@ -124,6 +146,7 @@ import {
 import { isNodeSelectable } from '../tree/utils';
 import { Data } from '../_utils/types';
 import { ScrollbarProps } from '../scrollbar';
+import { SelectViewValue } from '../_components/select-view/interface';
 
 export default defineComponent({
   name: 'TreeSelect',
@@ -172,6 +195,7 @@ export default defineComponent({
      * */
     border: {
       type: Boolean,
+      default: true,
     },
     /**
      * @zh 是否允许搜索
@@ -347,7 +371,7 @@ export default defineComponent({
      * @en Mount container for pop-up box
      */
     popupContainer: {
-      type: [String, Object] as PropType<string | HTMLElement | undefined>,
+      type: [String, Object] as PropType<string | HTMLElement>,
     },
     /**
      * @zh 为 value 中找不到匹配项的 key 定义节点数据
@@ -385,6 +409,40 @@ export default defineComponent({
       type: [Boolean, Object] as PropType<boolean | ScrollbarProps>,
       default: true,
     },
+    /**
+     * @zh 空状态时是否显示header
+     * @en Whether to display the header in the empty state
+     */
+    showHeaderOnEmpty: {
+      type: Boolean as PropType<boolean>,
+      default: false,
+    },
+    /**
+     * @zh 空状态时是否显示footer
+     * @en Whether to display the footer in the empty state
+     */
+    showFooterOnEmpty: {
+      type: Boolean as PropType<boolean>,
+      default: false,
+    },
+    /**
+     * @zh 输入框的值
+     * @en The value of the input
+     * @vModel
+     * @version 2.55.0
+     */
+    inputValue: {
+      type: String,
+    },
+    /**
+     * @zh 输入框的默认值（非受控模式）
+     * @en The default value of the input (uncontrolled mode)
+     * @version 2.55.0
+     */
+    defaultInputValue: {
+      type: String,
+      default: '',
+    },
   },
   emits: {
     /**
@@ -410,6 +468,7 @@ export default defineComponent({
         | LabelValue[]
         | undefined
     ) => true,
+    'update:inputValue': (inputValue: string) => true,
     /**
      * @zh 下拉框显示状态改变时触发
      * @en Triggered when the status of the drop-down box changes
@@ -428,6 +487,13 @@ export default defineComponent({
      * @en Triggered when clear is clicked
      * */
     'clear': () => true,
+    /**
+     * @zh 输入框的值发生改变时触发
+     * @en Triggered when the value of the input changes
+     * @param {string} inputValue
+     * @version 2.55.0
+     */
+    'inputValueChange': (inputValue: string) => true,
   },
   /**
    * @zh 自定义触发元素
@@ -472,13 +538,24 @@ export default defineComponent({
    * @zh 定制 tree 组件的节点标题
    * @en Custom the node title of the tree component
    * @slot tree-slot-title
+   * @binding {string} title
    */
   /**
    * @zh 定制 tree 组件的渲染额外节点内容
    * @en Render additional node content of the tree component
    * @slot tree-slot-extra
    */
-  setup(props, { emit }) {
+  /**
+   * @zh 自定义下拉框页头
+   * @en The header of the drop-down box
+   * @slot header
+   */
+  /**
+   * @zh 自定义下拉框页脚
+   * @en The footer of the drop-down box
+   * @slot footer
+   */
+  setup(props, { emit, slots }) {
     const {
       defaultValue,
       modelValue,
@@ -497,11 +574,16 @@ export default defineComponent({
       treeProps,
       fallbackOption,
       selectable,
+      dropdownClassName,
     } = toRefs(props);
     const { mergedDisabled, eventHandlers } = useFormItem({
       disabled,
     });
     const prefixCls = getPrefixCls('tree-select');
+    const configCtx = inject(configProviderInjectionKey, undefined);
+    const TreeSelectEmpty = configCtx?.slots.empty?.({
+      component: 'tree-select',
+    })?.[0];
     const isMultiple = computed(() => multiple.value || treeCheckable.value);
     const isSelectable = (
       node: TreeNodeData,
@@ -564,9 +646,9 @@ export default defineComponent({
             ...i,
             closable: !node || isNodeClosable(node),
           };
-        });
+        }) as SelectViewValue[];
       }
-      return selectedValue.value;
+      return selectedValue.value as SelectViewValue[];
     });
 
     const setSelectedKeys = (newVal: TreeNodeKey[]) => {
@@ -586,7 +668,26 @@ export default defineComponent({
       });
     };
 
-    const searchValue = ref('');
+    const _inputValue = ref(props.defaultInputValue);
+    const computedInputValue = computed(
+      () => props.inputValue ?? _inputValue.value
+    );
+
+    const updateInputValue = (inputValue: string) => {
+      _inputValue.value = inputValue;
+      emit('update:inputValue', inputValue);
+      emit('inputValueChange', inputValue);
+    };
+
+    const handleInputValueChange = (inputValue: string) => {
+      if (inputValue !== computedInputValue.value) {
+        setPanelVisible(true);
+        updateInputValue(inputValue);
+        if (props.allowSearch) {
+          emit('search', inputValue);
+        }
+      }
+    };
 
     const [panelVisible, setLocalPanelVisible] = useMergeState(
       defaultPopupVisible.value,
@@ -611,7 +712,7 @@ export default defineComponent({
     const { isEmptyFilterResult, filterTreeNode: computedFilterTreeNode } =
       useFilterTreeNode(
         reactive({
-          searchValue,
+          searchValue: computedInputValue,
           flattenTreeData,
           filterMethod: filterTreeNode,
           disableFilter,
@@ -619,7 +720,9 @@ export default defineComponent({
         })
       );
 
-    const isEmptyTreeData = computed(() => !flattenTreeData.value.length);
+    const isEmpty = computed(
+      () => !flattenTreeData.value.length || isEmptyFilterResult.value
+    );
 
     const refSelectView = ref();
 
@@ -629,35 +732,31 @@ export default defineComponent({
     ]);
 
     const onBlur = () => {
-      if (!retainInputValue.value && searchValue.value) {
-        searchValue.value = '';
+      if (!retainInputValue.value && computedInputValue.value) {
+        updateInputValue('');
       }
     };
 
     return {
       refSelectView,
       prefixCls,
+      TreeSelectEmpty,
       selectedValue,
       selectedKeys,
       mergedDisabled,
-      searchValue,
+      searchValue: computedInputValue,
       panelVisible,
-      isEmptyTreeData,
-      isEmptyFilterResult,
+      isEmpty,
       computedFilterTreeNode,
       isMultiple,
       selectViewValue,
       computedDropdownStyle,
-      onSearchValueChange(newVal: string) {
-        if (newVal !== searchValue.value) {
-          setPanelVisible(true);
-          searchValue.value = newVal;
-          emit('search', newVal);
-        }
-      },
+      onSearchValueChange: handleInputValueChange,
       onSelectChange(newVal: string[]) {
         setSelectedKeys(newVal);
-        searchValue.value = '';
+        if (!retainInputValue.value && computedInputValue.value) {
+          updateInputValue('');
+        }
 
         if (!isMultiple.value) {
           setPanelVisible(false);

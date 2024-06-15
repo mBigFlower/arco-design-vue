@@ -2,6 +2,42 @@
 changelog: true
 ```
 
+## 2.49.0
+
+`2023-07-21`
+
+### 🆕 Feature
+
+- Scroll maxHeight supports string type ([#2544](https://github.com/arco-design/arco-design-vue/pull/2544))
+
+
+## 2.48.0
+
+`2023-06-30`
+
+### 🐛 BugFix
+
+- fix virtual-list scrolling position is wrong when data is modified ([#2502](https://github.com/arco-design/arco-design-vue/pull/2502))
+
+
+## 2.44.6
+
+`2023-03-31`
+
+### 🐛 BugFix
+
+- Fix an issue that may trigger reach-bottom when scrolling up ([#2295](https://github.com/arco-design/arco-design-vue/pull/2295))
+
+
+## 2.44.2
+
+`2023-03-17`
+
+### 🐛 BugFix
+
+- list supports backend data pagination ([#2199](https://github.com/arco-design/arco-design-vue/pull/2199))
+
+
 ## 2.40.1
 
 `2022-12-23`

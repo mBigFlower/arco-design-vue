@@ -49,8 +49,8 @@ description: Open a floating layer on the current page to carry related operatio
 |ok-text|The content of the confirm button|`string`|`-`||
 |cancel-text|The content of the cancel button|`string`|`-`||
 |ok-loading|Whether the confirm button is in the loading state|`boolean`|`false`||
-|ok-button-props|Props of confirm button|`object`|`-`||
-|cancel-button-props|Props of cancel button|`object`|`-`||
+|ok-button-props|Props of confirm button|`ButtonProps`|`-`||
+|cancel-button-props|Props of cancel button|`ButtonProps`|`-`||
 |footer|Whether to show the footer|`boolean`|`true`||
 |render-to-body|Whether the modal is mounted under the `body` element|`boolean`|`true`||
 |popup-container|Mount container for modal|`string \| HTMLElement`|`'body'`||
@@ -66,12 +66,13 @@ description: Open a floating layer on the current page to carry related operatio
 |modal-animation-name|Modal animation name|`string`|`-`|2.24.0|
 |body-class|The classname of the modal|`string \| any[]`|`-`|2.31.0|
 |body-style|Modal style|`StyleValue`|`-`|2.31.0|
+|hide-title|Whether to hide the title|`boolean`|`false`|2.50.0|
 ### `<modal>` Events
 
 |Event Name|Description|Parameters|version|
 |---|---|---|:---|
-|ok|Triggered when the OK button is clicked|-||
-|cancel|Triggered when the cancel/close button is clicked|-||
+|ok|Triggered when the OK button is clicked|ev: `MouseEvent`||
+|cancel|Triggered when the cancel/close button is clicked|ev: `MouseEvent \| KeyboardEvent`||
 |open|Triggered after the modal is opened (the animation ends)|-||
 |close|Triggered after the modal is closed (the animation ends)|-||
 |before-open|Triggered before dialog is opened|-|2.16.0|
@@ -111,23 +112,23 @@ Modal._context = app._context;
 |title|Title|`RenderContent`|`-`||
 |content|Content|`RenderContent`|`-`||
 |footer|Footer|`boolean \| RenderContent`|`true`||
-|closable|Whether to show the close button|`boolean`|`false`||
+|closable|Whether to show the close button|`boolean`|`true`||
 |okText|The content of the confirm button|`string`|`-`||
 |cancelText|The content of the cancel button|`string`|`-`||
-|okButtonProps|Props of confirm button|`any`|`-`||
-|cancelButtonProps|Props of cancel button|`any`|`-`||
+|okButtonProps|Props of confirm button|`ButtonProps`|`-`||
+|cancelButtonProps|Props of cancel button|`ButtonProps`|`-`||
 |okLoading|Whether the confirm button is in the loading state|`boolean`|`false`||
 |hideCancel|Whether to hide the cancel button|`boolean`|`false`||
-|mask|Whether to show the mask|`boolean`|`false`||
+|mask|Whether to show the mask|`boolean`|`true`||
 |simple|Whether to enable simple mode|`boolean`|`false`||
-|maskClosable|Whether to close the modal when click the mask|`boolean`|`false`||
+|maskClosable|Whether to close the modal when click the mask|`boolean`|`true`||
 |maskStyle|Mask style|`CSSProperties`|`-`||
-|alignCenter|Whether the dialog box is displayed in the center|`boolean`|`false`||
-|escToClose|Whether to support the ESC key to close the dialog|`boolean`|`false`|2.15.0|
+|alignCenter|Whether the dialog box is displayed in the center|`boolean`|`true`||
+|escToClose|Whether to support the ESC key to close the dialog|`boolean`|`true`|2.15.0|
 |draggable|Whether to support drag|`boolean`|`false`|2.19.0|
 |fullscreen|Whether to enable full screen|`boolean`|`false`|2.19.0|
-|onOk|Callback function for clicking the OK button|`() => void`|`-`||
-|onCancel|Callback function for clicking the Cancel button|`() => void`|`-`||
+|onOk|Callback function for clicking the OK button|`(e?: Event) => void`|`-`||
+|onCancel|Callback function for clicking the Cancel button|`(e?: Event) => void`|`-`||
 |onBeforeOk|The callback function before the ok event is triggered. If false is returned, subsequent events will not be triggered, and done can also be used to close asynchronously.|`(    done: (closed: boolean) => void  ) => void \| boolean \| Promise<void \| boolean>`|`-`|2.7.0|
 |onBeforeCancel|The callback function before the cancel event is triggered. If it returns false, no subsequent events will be triggered.|`() => boolean`|`-`|2.7.0|
 |onOpen|Triggered after the modal is opened (the animation ends)|`() => void`|`-`||
@@ -136,13 +137,16 @@ Modal._context = app._context;
 |onBeforeClose|Triggered before dialog is closed|`() => void`|`-`|2.16.0|
 |width|The width of the dialog box, if not set, the width value in the style will be used|`number \| string`|`-`|2.12.0|
 |top|The height from the top of the dialog box. It does not take effect when the center display is turned on.|`number \| string`|`-`|2.12.0|
-|titleAlign|horizontal alignment of the title|`'start' \| 'center'`|`-`|2.17.0|
-|renderToBody|Whether the modal is mounted under the `body` element|`boolean`|`false`||
-|popupContainer|Mount container for modal|`string \| HTMLElement`|`-`||
+|titleAlign|horizontal alignment of the title|`'start' \| 'center'`|`'center'`|2.17.0|
+|renderToBody|Whether the modal is mounted under the `body` element|`boolean`|`true`||
+|popupContainer|Mount container for modal|`string \| HTMLElement`|`'body'`||
 |modalClass|The classname of the modal|`string \| any[]`|`-`||
 |modalStyle|Modal style|`CSSProperties`|`-`||
 |maskAnimationName|Mask layer animation name|`string`|`-`|2.24.0|
 |modalAnimationName|Modal animation name|`string`|`-`|2.24.0|
+|hideTitle|Whether to hide the title|`boolean`|`false`|2.50.0|
+|bodyClass|The classname of the modal|`string \| any[]`|`-`||
+|bodyStyle|Modal style|`StyleValue`|`-`||
 
 
 

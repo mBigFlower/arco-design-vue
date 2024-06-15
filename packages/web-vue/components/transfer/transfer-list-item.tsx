@@ -32,14 +32,12 @@ export default defineComponent({
     const transferCtx = inject(transferInjectionKey, undefined);
 
     const handleClick = () => {
-      if (!props.simple) {
-        return;
+      if (props.simple && !props.disabled) {
+        transferCtx?.moveTo(
+          [props.data.value],
+          props.type === 'target' ? 'source' : 'target'
+        );
       }
-
-      transferCtx?.moveTo(
-        [props.data.value],
-        props.type === 'target' ? 'source' : 'target'
-      );
     };
 
     const cls = computed(() => [
@@ -72,6 +70,7 @@ export default defineComponent({
               transferCtx?.onSelect(value as string[])
             }
             uninjectGroupContext
+            disabled={props.disabled}
           >
             {transferCtx?.slots.item?.({
               label: props.data.label,

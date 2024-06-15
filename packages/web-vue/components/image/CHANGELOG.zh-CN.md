@@ -2,6 +2,56 @@
 changelog: true
 ```
 
+## 2.54.3
+
+`2024-01-19`
+
+### 🐛 问题修复
+
+- 修复错误的类型定义和文档说明 ([#2924](https://github.com/arco-design/arco-design-vue/pull/2924))
+- 修正单词拼写错误 ([#2924](https://github.com/arco-design/arco-design-vue/pull/2924))
+
+
+## 2.50.0
+
+`2023-08-11`
+
+### 🆕 新增功能
+
+- 支持键盘快捷、鼠标滚轮操作等一系列功能 ([#2616](https://github.com/arco-design/arco-design-vue/pull/2616))
+
+### 🆎 类型修正
+
+- 添加 ImagePreviewAction 类型声明 ([#2625](https://github.com/arco-design/arco-design-vue/pull/2625))
+
+
+## 2.48.1
+
+`2023-07-14`
+
+### 🐛 问题修复
+
+- 在错误状态下，没有 alt 或description情况图标不垂直居中 ([#2563](https://github.com/arco-design/arco-design-vue/pull/2563))
+
+
+## 2.46.0
+
+`2023-05-12`
+
+### 🆕 新增功能
+
+- 添加 actions 插槽 ([#2389](https://github.com/arco-design/arco-design-vue/pull/2389))
+
+
+## 2.45.1
+
+`2023-04-14`
+
+### 🐛 问题修复
+
+- 修复 `sizeStyle` 失效的问题 ([#2327](https://github.com/arco-design/arco-design-vue/pull/2327))
+
+
 ## 2.41.0
 
 `2022-12-30`

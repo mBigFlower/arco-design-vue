@@ -35,7 +35,7 @@
 <script lang="ts">
 import { defineComponent, PropType, toRefs } from 'vue';
 import IconMore from '../icon/icon-more';
-import Button, { ButtonGroup } from '../button';
+import Button, { ButtonGroup, ButtonProps } from '../button';
 import Dropdown from './dropdown.vue';
 import { getPrefixCls } from '../_utils/global-config';
 import { TriggerEvent } from '../_utils/constant';
@@ -92,9 +92,7 @@ export default defineComponent({
      * @en Mount container for popup
      */
     popupContainer: {
-      type: [String, Object] as PropType<
-        string | HTMLElement | null | undefined
-      >,
+      type: [String, Object] as PropType<string | HTMLElement>,
     },
     /**
      * @zh 是否禁用
@@ -123,7 +121,7 @@ export default defineComponent({
      * @en Button props
      */
     buttonProps: {
-      type: Object,
+      type: Object as PropType<ButtonProps>,
     },
     /**
      * @zh 是否在用户选择后隐藏弹出框

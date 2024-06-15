@@ -124,11 +124,11 @@ description: When there are too many commands on the page, the alternative comma
 |default-popup-visible|Whether the popup is visible by default (uncontrolled mode)|`boolean`|`false`|
 |trigger|Trigger method|`'hover' \| 'click' \| 'focus' \| 'contextMenu'`|`'click'`|
 |position|Popup position|`'top' \| 'tl' \| 'tr' \| 'bottom' \| 'bl' \| 'br'`|`'br'`|
-|popup-container|Mount container for popup|`string \| HTMLElement \| null \| undefined`|`-`|
+|popup-container|Mount container for popup|`string \| HTMLElement`|`-`|
 |disabled|Whether to disable|`boolean`|`false`|
 |type|Button type|`string`|`-`|
 |size|Button size|`string`|`-`|
-|button-props|Button props|`object`|`-`|
+|button-props|Button props|`ButtonProps`|`-`|
 |hide-on-select|Whether to hide popup when the user selects|`boolean`|`true`|
 ### `<dropdown-button>` Events
 

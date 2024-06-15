@@ -2,6 +2,100 @@
 changelog: true
 ```
 
+## 2.54.5
+
+`2024-02-21`
+
+### 🐛 BugFix
+
+- refactor date utility functions and week picker to correctly show selected week ([#2970](https://github.com/arco-design/arco-design-vue/pull/2970))
+
+
+## 2.54.0
+
+`2023-12-15`
+
+### 🐛 BugFix
+
+- resolve arrow click issue in range-picker ([#2865](https://github.com/arco-design/arco-design-vue/pull/2865))
+
+
+## 2.53.3
+
+`2023-11-24`
+
+### 🐛 BugFix
+
+- fix invalid date due to mismatch between date and format ([#2789](https://github.com/arco-design/arco-design-vue/pull/2789))
+
+
+## 2.52.0
+
+`2023-09-22`
+
+### 🐛 BugFix
+
+- fix incorrect display of operations in range selector ([#2712](https://github.com/arco-design/arco-design-vue/pull/2712))
+
+
+## 2.47.0
+
+`2023-06-02`
+
+### 🐛 BugFix
+
+- add getDefaultValueFormat to solve v-model for week selector and quarter selector ([#2437](https://github.com/arco-design/arco-design-vue/pull/2437))
+
+
+## 2.46.1
+
+`2023-05-26`
+
+### 🐛 BugFix
+
+- fixed arrow display logic for year, month, and quarter modes in the date range picker ([#2451](https://github.com/arco-design/arco-design-vue/pull/2451))
+
+
+## 2.46.0
+
+`2023-05-12`
+
+### 🆎 TypeScript
+
+- DatePicker ([#2359](https://github.com/arco-design/arco-design-vue/pull/2359))
+
+
+## 2.45.2
+
+`2023-04-21`
+
+### 🐛 BugFix
+
+- fix styling problem with panel-only pickers ([#2349](https://github.com/arco-design/arco-design-vue/pull/2349))
+
+
+## 2.45.0
+
+`2023-04-07`
+
+### 🆕 Feature
+
+- Add the abbreviation property to control whether the abbreviation of the month is displayed ([#2264](https://github.com/arco-design/arco-design-vue/pull/2264))
+
+### 🐛 BugFix
+
+- Fix the problem that exchange-time fails when selecting ([#2302](https://github.com/arco-design/arco-design-vue/pull/2302))
+
+
+## 2.44.3
+
+`2023-03-24`
+
+### 🐛 BugFix
+
+- Fix bugs with year range selector ([#2270](https://github.com/arco-design/arco-design-vue/pull/2270))
+
+
 ## 2.43.1
 
 `2023-02-17`

@@ -2,6 +2,116 @@
 changelog: true
 ```
 
+## 2.55.3
+
+`2024-06-07`
+
+### 🆕 Feature
+
+- colum added the minWidth attribute ([#3157](https://github.com/arco-design/arco-design-vue/pull/3157))
+
+### 🐛 BugFix
+
+- fix table sticky-header failure with scrollbar ([#3170](https://github.com/arco-design/arco-design-vue/pull/3170))
+- Restore default style when table dynamically switches row-selection ([#3155](https://github.com/arco-design/arco-design-vue/pull/3155))
+
+
+## 2.54.4
+
+`2024-02-02`
+
+### 🐛 BugFix
+
+- fix virtual table list not displaying empty state ([#2949](https://github.com/arco-design/arco-design-vue/pull/2949))
+
+
+## 2.54.2
+
+`2024-01-11`
+
+### 🐛 BugFix
+
+- Fix the problem of `span-method` reporting an error after exceeding the number of rows and columns ([#2914](https://github.com/arco-design/arco-design-vue/pull/2914))
+
+
+## 2.51.0
+
+`2023-09-01`
+
+### 🆕 Feature
+
+- Support displaying empty subtrees ([#2673](https://github.com/arco-design/arco-design-vue/pull/2673))
+
+
+## 2.49.2
+
+`2023-07-28`
+
+### 🐛 BugFix
+
+- Fix the problem of turning on the adjustment of column width in the fixed column ([#2598](https://github.com/arco-design/arco-design-vue/pull/2598))
+- fix drag issue in tree table ([#2503](https://github.com/arco-design/arco-design-vue/pull/2503))
+
+
+## 2.49.0
+
+`2023-07-21`
+
+### 🐛 BugFix
+
+- Fix the wrong parameter of rowClass function record ([#2570](https://github.com/arco-design/arco-design-vue/pull/2570))
+
+
+## 2.48.1
+
+`2023-07-14`
+
+### 🐛 BugFix
+
+- Fix the wrong outgoing parameter in the `summary-span-method` attribute ([#2552](https://github.com/arco-design/arco-design-vue/pull/2552))
+- fix the bug of merging cells in subtrees ([#2540](https://github.com/arco-design/arco-design-vue/pull/2540))
+
+
+## 2.48.0
+
+`2023-06-30`
+
+### 🆕 Feature
+
+- Added mouse in and out events for cells ([#2489](https://github.com/arco-design/arco-design-vue/pull/2489))
+
+### 🐛 BugFix
+
+- add headerCell down to adjust column width highlight ([#2519](https://github.com/arco-design/arco-design-vue/pull/2519))
+
+
+## 2.46.1
+
+`2023-05-26`
+
+### 💎 Enhancement
+
+- Add table right-click and double-click events ([#2452](https://github.com/arco-design/arco-design-vue/pull/2452))
+
+
+## 2.46.0
+
+`2023-05-12`
+
+### 🐛 BugFix
+
+- Fix the problem that when the dataIndex is in the path format, the sorting and summary column functions do not take effect ([#2413](https://github.com/arco-design/arco-design-vue/pull/2413))
+
+
+## 2.45.1
+
+`2023-04-14`
+
+### 💅 Style
+
+- Fix the problem of displaying the horizontal scroll bar under the virtual list ([#2337](https://github.com/arco-design/arco-design-vue/pull/2337))
+
+
 ## 2.41.1
 
 `2023-01-06`

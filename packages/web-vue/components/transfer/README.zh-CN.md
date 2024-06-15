@@ -6,6 +6,7 @@ title: 数据穿梭框 Transfer
 description: 两栏布局的多选组件，将元素从一栏即时移到另一栏。
 ```
 
+
 @import ./__demo__/basic.md
 
 @import ./__demo__/search.md
@@ -17,6 +18,8 @@ description: 两栏布局的多选组件，将元素从一栏即时移到另一�
 @import ./__demo__/simple.md
 
 @import ./__demo__/tree.md
+
+@import ./__demo__/custom-header.md
 
 ## API
 
@@ -36,6 +39,8 @@ description: 两栏布局的多选组件，将元素从一栏即时移到另一�
 |show-search|是否显示搜索框|`boolean`|`false`||
 |show-select-all|是否展示全选勾选框|`boolean`|`true`|2.39.0|
 |title|源选择框和目标选择框的标题|`string[]`|`['Source', 'Target']`||
+|source-input-search-props|源选择框的搜索框配置|`object`|`-`|2.51.1|
+|target-input-search-props|目标选择框的搜索框配置|`object`|`-`|2.51.1|
 ### `<transfer>` Events
 
 |事件名|描述|参数|
@@ -48,7 +53,11 @@ description: 两栏布局的多选组件，将元素从一栏即时移到另一�
 |插槽名|描述|参数|版本|
 |---|:---:|---|:---|
 |source|源面板|data: `TransferItem[]`<br>selectedKeys: `string[]`<br>onSelect: `(value: string[]) => void`|2.39.0|
+|source-title|源标题插槽|countTotal: `number`<br>countSelected: `number`<br>searchValue: `string`<br>checked: `boolean`<br>indeterminate: `boolean`<br>onSelectAllChange: `(checked:boolean) => void`<br>onClear: `() => void`|2.45.0|
+|to-target-icon|移至目标图标插槽|-|2.52.0|
+|to-source-icon|移至源图标插槽|-|2.52.0|
 |target|目标面板|data: `TransferItem[]`<br>selectedKeys: `string[]`<br>onSelect: `(value: string[]) => void`|2.39.0|
+|target-title|目标标题插槽|countTotal: `number`<br>countSelected: `number`<br>searchValue: `string`<br>checked: `boolean`<br>indeterminate: `boolean`<br>onSelectAllChange: `(checked:boolean) => void`<br>onClear: `() => void`|2.45.0|
 |item|选项|value: `string`<br>label: `string`||
 
 

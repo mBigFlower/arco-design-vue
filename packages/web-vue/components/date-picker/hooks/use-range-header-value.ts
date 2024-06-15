@@ -29,9 +29,9 @@ export default function useRangeHeaderValue(props: RangeHeaderValueProps) {
     onChange,
   } = toRefs(props);
 
-  const unit = computed(() =>
-    ['date', 'week'].includes(mode.value) ? 'M' : 'y'
-  );
+  const isDateOrWeek = computed(() => ['date', 'week'].includes(mode.value));
+
+  const unit = computed(() => (isDateOrWeek.value ? 'M' : 'y'));
 
   const isSame = (current: Dayjs, target: Dayjs) =>
     current.isSame(target, unit.value);
@@ -41,6 +41,9 @@ export default function useRangeHeaderValue(props: RangeHeaderValueProps) {
       mode,
     })
   );
+
+  const startMode = computed(() => startHeaderMode?.value || mode.value);
+  const endMode = computed(() => endHeaderMode?.value || mode.value);
 
   const startValue = computed(() => value.value?.[0]);
   const endValue = computed(() => value.value?.[1]);
@@ -58,7 +61,7 @@ export default function useRangeHeaderValue(props: RangeHeaderValueProps) {
     getDefaultLocalValue: getDefaultStartHeaderValue,
   } = useHeaderValue(
     reactive({
-      mode: startHeaderMode,
+      mode: startMode,
       value: startValue,
       defaultValue: startDefaultValue,
       selectedValue: undefined,
@@ -76,7 +79,7 @@ export default function useRangeHeaderValue(props: RangeHeaderValueProps) {
     getDefaultLocalValue: getDefaultEndHeaderValue,
   } = useHeaderValue(
     reactive({
-      mode: endHeaderMode,
+      mode: endMode,
       value: endValue,
       defaultValue: endDefaultValue,
       selectedValue: undefined,
@@ -163,15 +166,17 @@ export default function useRangeHeaderValue(props: RangeHeaderValueProps) {
   );
 
   const computedStartHeaderOperations = computed(() => {
-    const operations = ['onSuperPrev', 'onPrev'];
-    if (canShortenMonth.value) operations.push('onNext');
+    const operations = ['onSuperPrev'];
+    if (isDateOrWeek.value) operations.push('onPrev');
+    if (canShortenMonth.value && isDateOrWeek) operations.push('onNext');
     if (canShortenYear.value) operations.push('onSuperNext');
     return pick(startHeaderOperations.value as any, operations);
   });
 
   const computedEndHeaderOperations = computed(() => {
-    const operations = ['onSuperNext', 'onNext'];
-    if (canShortenMonth.value) operations.push('onPrev');
+    const operations = ['onSuperNext'];
+    if (isDateOrWeek.value) operations.push('onNext');
+    if (canShortenMonth.value && isDateOrWeek.value) operations.push('onPrev');
     if (canShortenYear.value) operations.push('onSuperPrev');
     return pick(endHeaderOperations.value as any, operations);
   });

@@ -99,7 +99,12 @@ import FormItemMessage from './form-item-message.vue';
 import { getPrefixCls } from '../_utils/global-config';
 import { getValueByPath, setValueByPath } from '../_utils/get-value-by-path';
 import { Data } from '../_utils/types';
-import { getFinalValidateMessage, getFinalValidateStatus } from './utils';
+import {
+  getFinalValidateMessage,
+  getFinalValidateStatus,
+  getFormElementId,
+} from './utils';
+import { useI18n } from '../locale';
 
 export default defineComponent({
   name: 'FormItem',
@@ -336,6 +341,7 @@ export default defineComponent({
     const { field } = toRefs(props);
     const formCtx = inject<Partial<FormContext>>(formInjectionKey, {});
     const { autoLabelWidth, layout } = toRefs(formCtx);
+    const { i18nMessage } = useI18n();
 
     const mergedLabelCol = computed(() => {
       const colProps = { ...(props.labelColProps ?? formCtx.labelColProps) };
@@ -351,6 +357,9 @@ export default defineComponent({
       const colProps = {
         ...(props.wrapperColProps ?? formCtx.wrapperColProps),
       };
+      if (field.value) {
+        colProps.id = getFormElementId(formCtx.id, field.value);
+      }
       if (props.labelColFlex || formCtx.autoLabelWidth) {
         colProps.flex = 'auto';
       }
@@ -363,6 +372,7 @@ export default defineComponent({
     const mergedWrapperStyle = computed(
       () => props.wrapperColStyle ?? formCtx.wrapperColStyle
     );
+
     // 记录初始值，用于重置表单
     const initialValue = getValueByPath(formCtx.model, props.field);
 
@@ -454,7 +464,10 @@ export default defineComponent({
             return rule;
           }),
         },
-        { ignoreEmptyString: true }
+        {
+          ignoreEmptyString: true,
+          validateMessages: i18nMessage.value.form?.validateMessages,
+        }
       );
 
       return new Promise((resolve) => {

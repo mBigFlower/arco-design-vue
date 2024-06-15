@@ -1,40 +1,61 @@
 <template>
   <div :class="prefixCls">
     <div :class="`${prefixCls}-header`">
-      <span :class="`${prefixCls}-header-title`">
-        <template v-if="allowClear || simple || !showSelectAll">{{
-          title
-        }}</template>
-        <checkbox
-          v-else
-          :model-value="checked"
-          :indeterminate="indeterminate"
-          uninject-group-context
-          @change="handleSelectAllChange"
-        >
-          {{ title }}
-        </checkbox>
-      </span>
-      <icon-hover
-        v-if="allowClear"
-        :class="`${prefixCls}-header-clear-btn`"
-        @click="handleClear"
+      <slot
+        name="title"
+        :count-total="dataInfo.data.length"
+        :count-selected="dataInfo.selected.length"
+        :search-value="filter"
+        :checked="checked"
+        :indeterminate="indeterminate"
+        :on-select-all-change="handleSelectAllChange"
+        :on-clear="handleClear"
       >
-        <icon-delete />
-      </icon-hover>
-      <span v-else-if="!simple" :class="`${prefixCls}-header-count`">
-        {{ dataInfo.selected.length }} / {{ dataInfo.data.length }}
-      </span>
+        <span :class="`${prefixCls}-header-title`">
+          <span
+            v-if="allowClear || simple || !showSelectAll"
+            :class="`${prefixCls}-header-title-simple`"
+          >
+            {{ title }}
+          </span>
+          <checkbox
+            v-else
+            :model-value="checked"
+            :indeterminate="indeterminate"
+            :disabled="disabled"
+            uninject-group-context
+            @change="handleSelectAllChange"
+          >
+            {{ title }}
+          </checkbox>
+        </span>
+        <icon-hover
+          v-if="allowClear"
+          :disabled="disabled"
+          :class="`${prefixCls}-header-clear-btn`"
+          @click="handleClear"
+        >
+          <icon-delete />
+        </icon-hover>
+        <span v-else-if="!simple" :class="`${prefixCls}-header-count`">
+          {{ dataInfo.selected.length }} / {{ dataInfo.data.length }}
+        </span>
+      </slot>
     </div>
     <div v-if="showSearch" :class="`${prefixCls}-search`">
-      <input-search v-model="filter" @change="handleSearch" />
+      <input-search
+        v-model="filter"
+        :disabled="disabled"
+        v-bind="inputSearchProps"
+        @change="handleSearch"
+      />
     </div>
     <div :class="`${prefixCls}-body`">
       <Scrollbar v-if="filteredData.length > 0">
         <slot
           :data="filteredData"
-          :selected-keys="transferCtx.selected"
-          :on-select="transferCtx.onSelect"
+          :selected-keys="transferCtx?.selected"
+          :on-select="transferCtx?.onSelect"
         >
           <list
             :class="`${prefixCls}-list`"
@@ -48,6 +69,7 @@
               :data="item"
               :simple="simple"
               :allow-clear="allowClear"
+              :disabled="disabled || item.disabled"
             />
           </list>
         </slot>
@@ -96,6 +118,7 @@ export default defineComponent({
       type: Array as PropType<TransferItem[]>,
       required: true,
     },
+    disabled: Boolean,
     allowClear: Boolean,
     selected: {
       type: Array as PropType<string[]>,
@@ -104,22 +127,27 @@ export default defineComponent({
     showSearch: Boolean,
     showSelectAll: Boolean,
     simple: Boolean,
+    inputSearchProps: {
+      type: Object,
+    },
   },
   emits: ['search'],
   setup(props, { emit }) {
     const prefixCls = getPrefixCls('transfer-view');
     const filter = ref('');
     const transferCtx = inject(transferInjectionKey, undefined);
+    const countSelected = computed(() => props.dataInfo.selected.length);
+    const countRendered = computed(() => props.dataInfo.data.length);
 
     const checked = computed(
       () =>
-        props.dataInfo.data.length > 0 &&
-        props.dataInfo.selected.length === props.dataInfo.data.length
+        props.dataInfo.selected.length > 0 &&
+        props.dataInfo.selected.length === props.dataInfo.allValidValues.length
     );
     const indeterminate = computed(
       () =>
         props.dataInfo.selected.length > 0 &&
-        props.dataInfo.selected.length < props.dataInfo.data.length
+        props.dataInfo.selected.length < props.dataInfo.allValidValues.length
     );
 
     const handleSelectAllChange = (checked: boolean) => {
@@ -160,6 +188,8 @@ export default defineComponent({
       filter,
       checked,
       indeterminate,
+      countSelected,
+      countRendered,
       handleSelectAllChange,
       handleSearch,
       handleClear,

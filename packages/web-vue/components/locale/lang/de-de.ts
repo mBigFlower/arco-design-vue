@@ -102,6 +102,7 @@ const lang: ArcoLang = {
     dragHover: 'Geben Sie die Datei frei und starten Sie den Upload',
     error: 'Upload fehlgeschlagen',
   },
+  calendar: calendarLang,
   datePicker: {
     view: calendarLang.view,
     month: calendarLang.month,
@@ -145,6 +146,11 @@ const lang: ArcoLang = {
     edit: 'Bearbeiten',
     collapse: 'Falten',
     expand: 'Erweitern',
+  },
+  colorPicker: {
+    history: 'Historische Farben',
+    preset: 'Standardfarbe des Systems',
+    empty: 'Noch keine',
   },
 };
 

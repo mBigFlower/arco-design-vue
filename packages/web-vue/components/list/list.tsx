@@ -1,6 +1,7 @@
 import {
   computed,
   defineComponent,
+  inject,
   isVNode,
   onMounted,
   PropType,
@@ -8,6 +9,7 @@ import {
   toRefs,
 } from 'vue';
 import { getPrefixCls } from '../_utils/global-config';
+import { configProviderInjectionKey } from '../config-provider/context';
 import Spin from '../spin';
 import Grid from '../grid';
 import Pagination, { PaginationProps } from '../pagination';
@@ -23,6 +25,7 @@ import { getAllElements } from '../_utils/vue-utils';
 import Scrollbar, { ScrollbarProps } from '../scrollbar';
 import { useComponentRef } from '../_hooks/use-component-ref';
 import { useScrollbar } from '../_hooks/use-scrollbar';
+import { isNumber } from '../_utils/is';
 
 export default defineComponent({
   name: 'List',
@@ -93,7 +96,7 @@ export default defineComponent({
      * @en Maximum height of the list
      */
     maxHeight: {
-      type: Number,
+      type: [String, Number] as PropType<string | number>,
       default: 0,
     },
     /**
@@ -176,19 +179,21 @@ export default defineComponent({
   setup(props, { emit, slots }) {
     const { scrollbar } = toRefs(props);
     const prefixCls = getPrefixCls('list');
+    const configCtx = inject(configProviderInjectionKey, undefined);
     const { componentRef, elementRef: listRef } =
       useComponentRef('containerRef');
     const isVirtualList = computed(() => props.virtualListProps);
     const { displayScrollbar, scrollbarProps } = useScrollbar(scrollbar);
+    let preScrollTop = 0;
 
     const handleScroll = (e: Event) => {
       const { scrollTop, scrollHeight, offsetHeight } = e.target as HTMLElement;
       const bottom = Math.floor(scrollHeight - (scrollTop + offsetHeight));
-
-      if (bottom <= props.bottomOffset) {
+      if (scrollTop > preScrollTop && bottom <= props.bottomOffset) {
         emit('reachBottom');
       }
       emit('scroll');
+      preScrollTop = scrollTop;
     };
 
     onMounted(() => {
@@ -207,9 +212,11 @@ export default defineComponent({
       if (!props.paginationProps) {
         return data;
       }
-
-      const startIndex = (current.value - 1) * pageSize.value;
-      return data.slice(startIndex, startIndex + pageSize.value);
+      if (props.paginationProps && data.length > pageSize.value) {
+        const startIndex = (current.value - 1) * pageSize.value;
+        return data.slice(startIndex, startIndex + pageSize.value);
+      }
+      return data;
     };
 
     const renderGridItems = (data: unknown[]) => {
@@ -313,8 +320,11 @@ export default defineComponent({
     ]);
 
     const contentStyle = computed(() => {
-      if (props.maxHeight > 0) {
-        return { maxHeight: `${props.maxHeight}px`, overflowY: 'auto' };
+      if (props.maxHeight) {
+        const maxHeight = isNumber(props.maxHeight)
+          ? `${props.maxHeight}px`
+          : props.maxHeight;
+        return { maxHeight, overflowY: 'auto' };
       }
       return undefined;
     });
@@ -363,7 +373,10 @@ export default defineComponent({
         return null;
       }
 
-      return slots.empty?.() ?? <Empty />;
+      return (
+        slots.empty?.() ??
+        configCtx?.slots.empty?.({ component: 'list' }) ?? <Empty />
+      );
     };
 
     const render = () => {

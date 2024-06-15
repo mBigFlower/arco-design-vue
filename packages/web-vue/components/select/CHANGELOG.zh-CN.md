@@ -2,6 +2,106 @@
 changelog: true
 ```
 
+## 2.54.2
+
+`2024-01-11`
+
+### 💎 功能优化
+
+- 下拉选择器添加选中效果 ([#2895](https://github.com/arco-design/arco-design-vue/pull/2895))
+
+
+## 2.54.1
+
+`2023-12-28`
+
+### 🐛 问题修复
+
+- 修复 `defaultPopupVisible` 失效的问题 ([#2881](https://github.com/arco-design/arco-design-vue/pull/2881))
+
+
+## 2.51.0
+
+`2023-09-01`
+
+### 🆕 新增功能
+
+- 支持`boolean` 类型 ([#2661](https://github.com/arco-design/arco-design-vue/pull/2661))
+
+
+## 2.47.1
+
+`2023-06-09`
+
+### 🐛 问题修复
+
+- 修复搜索模式下鼠标光标定位问题 ([#2487](https://github.com/arco-design/arco-design-vue/pull/2487))
+
+
+## 2.47.0
+
+`2023-06-02`
+
+### 🆕 新增功能
+
+- 空状态下可以显示 header 和 footer ([#2429](https://github.com/arco-design/arco-design-vue/pull/2429))
+
+
+## 2.46.0
+
+`2023-05-12`
+
+### 💎 功能优化
+
+- 选择框增加 title 提示 ([#2412](https://github.com/arco-design/arco-design-vue/pull/2412))
+
+
+## 2.45.3
+
+`2023-04-28`
+
+### 🐛 问题修复
+
+- 修复输入法状态下 Enter 键会触发选择的问题 ([#2378](https://github.com/arco-design/arco-design-vue/pull/2378))
+
+
+## 2.45.2
+
+`2023-04-21`
+
+### 💅 样式更新
+
+- 修复 select-view-input 的 line-height 和 height 不一致 ([#2346](https://github.com/arco-design/arco-design-vue/pull/2346))
+
+
+## 2.44.6
+
+`2023-03-31`
+
+### 🐛 问题修复
+
+- 修复设置 modelValue 为 undefined 失效的问题 ([#2285](https://github.com/arco-design/arco-design-vue/pull/2285))
+
+
+## 2.44.3
+
+`2023-03-24`
+
+### 🐛 问题修复
+
+- 修复动态 slot options 导致 dropdown 为空的问题 ([#2265](https://github.com/arco-design/arco-design-vue/pull/2265))
+- 不允许自动创建空字符串条目。含有空字符串的下拉选项，清空时将值设置为 `undefined` ([#2257](https://github.com/arco-design/arco-design-vue/pull/2257))
+
+
+## 2.44.2
+
+`2023-03-17`
+
+### 🐛 问题修复
+
+- 下拉选项值支持空字符串 ([#2190](https://github.com/arco-design/arco-design-vue/pull/2190))
+
+
 ## 2.43.0
 
 `2023-02-10`

@@ -20,14 +20,20 @@
       </span>
     </span>
     <!--  prettier-ignore  -->
-    <template v-if="type !== 'line' && size !== 'small' && ($slots.checked || $slots.unchecked)">
+    <template
+      v-if="
+        type !== 'line' &&
+        size !== 'small' &&
+        ($slots.checked || checkedText || $slots.unchecked || uncheckedText)
+      "
+    >
       <span :class="`${prefixCls}-text-holder`">
-        <slot v-if="computedCheck" name="checked" />
-        <slot v-else name="unchecked" />
+        <slot v-if="computedCheck" name="checked">{{ checkedText }}</slot>
+        <slot v-else name="unchecked">{{ uncheckedText }}</slot>
       </span>
       <span :class="`${prefixCls}-text`">
-        <slot v-if="computedCheck" name="checked" />
-        <slot v-else name="unchecked" />
+        <slot v-if="computedCheck" name="checked">{{ checkedText }}</slot>
+        <slot v-else name="unchecked">{{ uncheckedText }}</slot>
       </span>
     </template>
   </button>
@@ -35,12 +41,12 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { computed, defineComponent, ref, toRefs } from 'vue';
+import { computed, defineComponent, ref, toRefs, watch } from 'vue';
 import { getPrefixCls } from '../_utils/global-config';
 import IconLoading from '../icon/icon-loading';
 import { useFormItem } from '../_hooks/use-form-item';
 import { useSize } from '../_hooks/use-size';
-import { isFunction } from '../_utils/is';
+import { isFunction, isNull, isUndefined } from '../_utils/is';
 
 export default defineComponent({
   name: 'Switch',
@@ -143,6 +149,22 @@ export default defineComponent({
         ) => Promise<boolean | void> | boolean | void
       >,
     },
+    /**
+     * @zh 打开状态时的文案（`type='line'`和`size='small'`时不生效）
+     * @en Copywriting when opened (not effective when `type='line'` and `size='small'`)
+     * @version 2.45.0
+     */
+    checkedText: {
+      type: String,
+    },
+    /**
+     * @zh 关闭状态时的文案（`type='line'`和`size='small'`时不生效）
+     * @en Copywriting when closed (not effective when `type='line'` and `size='small'`)
+     * @version 2.45.0
+     */
+    uncheckedText: {
+      type: String,
+    },
   },
   emits: {
     'update:modelValue': (value: boolean | string | number) => true,
@@ -187,7 +209,7 @@ export default defineComponent({
    * @slot unchecked-icon
    */
   setup(props, { emit }) {
-    const { disabled, size } = toRefs(props);
+    const { disabled, size, modelValue } = toRefs(props);
     const prefixCls = getPrefixCls('switch');
     const { mergedSize: configSize } = useSize(size);
     const { mergedDisabled, mergedSize, eventHandlers } = useFormItem({
@@ -226,7 +248,6 @@ export default defineComponent({
           if (result ?? true) {
             handleChange(checked, ev);
           }
-        } catch (error) {
         } finally {
           _loading.value = false;
         }
@@ -244,6 +265,12 @@ export default defineComponent({
       emit('blur', ev);
       eventHandlers.value?.onBlur?.(ev);
     };
+
+    watch(modelValue, (value) => {
+      if (isUndefined(value) || isNull(value)) {
+        _checked.value = props.uncheckedValue;
+      }
+    });
 
     const cls = computed(() => [
       prefixCls,

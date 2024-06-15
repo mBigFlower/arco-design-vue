@@ -2,6 +2,69 @@
 changelog: true
 ```
 
+## 2.54.6
+
+`2024-03-01`
+
+### 🐛 BugFix
+
+- fix overlap between step button and suffix/append ([#3005](https://github.com/arco-design/arco-design-vue/pull/3005))
+
+
+## 2.54.5
+
+`2024-02-21`
+
+### 🐛 BugFix
+
+- fix v-model not working ([#2961](https://github.com/arco-design/arco-design-vue/pull/2961))
+
+
+## 2.54.4
+
+`2024-02-02`
+
+### 🐛 BugFix
+
+- Fix change event triggering mechanism ([#2915](https://github.com/arco-design/arco-design-vue/pull/2915))
+
+
+## 2.52.0
+
+`2023-09-22`
+
+### 🆕 Feature
+
+- Add `input-attrs` attribute ([#2716](https://github.com/arco-design/arco-design-vue/pull/2716))
+
+
+## 2.50.2
+
+`2023-08-25`
+
+### 💎 Enhancement
+
+- Optimize the long-press effect of the step button ([#2668](https://github.com/arco-design/arco-design-vue/pull/2668))
+
+
+## 2.49.0
+
+`2023-07-21`
+
+### 🆕 Feature
+
+- add slots for input-number box value manipulation icons ([#2560](https://github.com/arco-design/arco-design-vue/pull/2560))
+
+
+## 2.47.0
+
+`2023-06-02`
+
+### ⚠️ Important Attention
+
+- `hide-button` also takes effect when `mode="button"` ([#2461](https://github.com/arco-design/arco-design-vue/pull/2461))
+
+
 ## 2.43.2
 
 `2023-02-24`

@@ -215,6 +215,7 @@ export default defineComponent({
     const showClearBtn = computed(
       () =>
         props.allowClear &&
+        !props.readonly &&
         !mergedDisabled.value &&
         Boolean(computedValue.value)
     );
@@ -253,6 +254,11 @@ export default defineComponent({
       return props.maxLength;
     });
 
+    const defaultMaxLength = computed(() => {
+      const bytePerChar = getValueLength('a');
+      return Math.floor(maxLength.value / bytePerChar);
+    });
+
     const updateValue = (value: string) => {
       if (
         maxLength.value &&
@@ -261,7 +267,7 @@ export default defineComponent({
       ) {
         value =
           props.wordSlice?.(value, maxLength.value) ??
-          value.slice(0, maxLength.value);
+          value.slice(0, defaultMaxLength.value);
       }
 
       _value.value = value;
@@ -308,7 +314,7 @@ export default defineComponent({
         if (
           maxLength.value &&
           !maxLengthErrorOnly.value &&
-          computedValue.value.length >= maxLength.value &&
+          valueLength.value >= maxLength.value &&
           getValueLength(value) > maxLength.value &&
           selectionStart === selectionEnd
         ) {
@@ -344,8 +350,8 @@ export default defineComponent({
         if (
           maxLength.value &&
           !maxLengthErrorOnly.value &&
-          (computedValue.value.length >= maxLength.value ||
-            getValueLength(value) > maxLength.value) &&
+          valueLength.value >= maxLength.value &&
+          getValueLength(value) > maxLength.value &&
           (e as InputEvent).inputType === 'insertText'
         ) {
           keepControl();
@@ -420,7 +426,6 @@ export default defineComponent({
           <span class={`${prefixCls}-prefix`}>{slots.prefix()}</span>
         )}
         <input
-          {...mergeInputAttrs.value}
           ref={inputRef}
           class={cls.value}
           value={computedValue.value}
@@ -435,6 +440,7 @@ export default defineComponent({
           onCompositionstart={handleComposition}
           onCompositionupdate={handleComposition}
           onCompositionend={handleComposition}
+          {...mergeInputAttrs.value}
         />
         {showClearBtn.value && (
           <IconHover

@@ -27,6 +27,7 @@ import {
   isString,
   isUndefined,
 } from '../_utils/is';
+import { debounce } from '../_utils/debounce';
 import type {
   TableBorder,
   TableChangeExtra,
@@ -40,7 +41,11 @@ import type {
   TablePagePosition,
   TableRowSelection,
 } from './interface';
-import { getGroupColumns, spliceFromPath } from './utils';
+import {
+  getGroupColumns,
+  mapArrayWithChildren,
+  mapRawTableData,
+} from './utils';
 import { useRowSelection } from './hooks/use-row-selection';
 import { useExpand } from './hooks/use-expand';
 import { usePagination } from './hooks/use-pagination';
@@ -74,6 +79,7 @@ import Scrollbar, { ScrollbarProps } from '../scrollbar';
 import { useComponentRef } from '../_hooks/use-component-ref';
 import type { BaseType } from '../_utils/types';
 import { useScrollbar } from '../_hooks/use-scrollbar';
+import { getValueByPath, setValueByPath } from '../_utils/get-value-by-path';
 
 const DEFAULT_BORDERED = {
   wrapper: true,
@@ -411,6 +417,15 @@ export default defineComponent({
       type: [Object, Boolean] as PropType<boolean | ScrollbarProps>,
       default: true,
     },
+    /**
+     * @zh 是否展示空子树
+     * @en Whether to display empty subtrees
+     * @version 2.51.0
+     */
+    showEmptyTree: {
+      type: Boolean,
+      default: false,
+    },
   },
   emits: {
     'update:selectedKeys': (rowKeys: (string | number)[]) => true,
@@ -492,6 +507,24 @@ export default defineComponent({
       currentData: TableData[]
     ) => true,
     /**
+     * @zh 单元格 hover 进入时触发
+     * @en Triggered when hovering into a cell
+     * @param {TableData} record
+     * @param {TableColumnData} column
+     * @param {Event} ev
+     */
+    'cellMouseEnter': (record: TableData, column: TableColumnData, ev: Event) =>
+      true,
+    /**
+     * @zh 单元格 hover 退出时触发
+     * @en Triggered when hovering out of a cell
+     * @param {TableData} record
+     * @param {TableColumnData} column
+     * @param {Event} ev
+     */
+    'cellMouseLeave': (record: TableData, column: TableColumnData, ev: Event) =>
+      true,
+    /**
      * @zh 点击单元格时触发
      * @en Triggered when a cell is clicked
      * @param {TableData} record
@@ -522,6 +555,41 @@ export default defineComponent({
      * @version 2.28.0
      */
     'columnResize': (dataIndex: string, width: number) => true,
+    /**
+     * @zh 双击行数据时触发
+     * @en Triggered when row data is double clicked
+     * @param {TableData} record
+     * @param {Event} ev
+     */
+    'rowDblclick': (record: TableData, ev: Event) => true,
+    /**
+     * @zh 双击单元格时触发
+     * @en Triggered when a cell is double clicked
+     * @param {TableData} record
+     * @param {TableColumnData} column
+     * @param {Event} ev
+     */
+    'cellDblclick': (record: TableData, column: TableColumnData, ev: Event) =>
+      true,
+    /**
+     * @zh 右击行数据时触发
+     * @en Triggered when row data is right clicked
+     * @param {TableData} record
+     * @param {Event} ev
+     */
+    'rowContextmenu': (record: TableData, ev: Event) => true,
+    /**
+     * @zh 右击单元格时触发
+     * @en Triggered when a cell is right clicked
+     * @param {TableData} record
+     * @param {TableColumnData} column
+     * @param {Event} ev
+     */
+    'cellContextmenu': (
+      record: TableData,
+      column: TableColumnData,
+      ev: Event
+    ) => true,
   },
   /**
    * @zh 表格列定义。启用时会屏蔽 columns 属性
@@ -631,8 +699,10 @@ export default defineComponent({
       draggable,
       summarySpanMethod,
       scrollbar,
+      showEmptyTree,
     } = toRefs(props);
     const prefixCls = getPrefixCls('table');
+    const configCtx = inject(configProviderInjectionKey, undefined);
     const bordered = computed(() => {
       if (isObject(props.bordered)) {
         return { ...DEFAULT_BORDERED, ...props.bordered };
@@ -704,12 +774,18 @@ export default defineComponent({
     const dataColumns = ref<TableColumnData[]>([]);
     const groupColumns = ref<TableColumnData[][]>([]);
 
+    const { resizingColumn, columnWidth, handleThMouseDown } = useColumnResize(
+      thRefs,
+      emit
+    );
+
     watch(
-      [columns, slotColumns],
+      [columns, slotColumns, columnWidth],
       ([columns, slotColumns]) => {
         const result = getGroupColumns(
           slotColumns ?? columns ?? [],
-          dataColumnMap
+          dataColumnMap,
+          columnWidth
         );
         dataColumns.value = result.dataColumns;
         groupColumns.value = result.groupColumns;
@@ -938,11 +1014,6 @@ export default defineComponent({
       handleDrop,
     } = useDrag(draggable);
 
-    const { resizingColumn, columnWidth, handleThMouseDown } = useColumnResize(
-      thRefs,
-      emit
-    );
-
     const processedData = computed(() => {
       const travel = (data: TableData[]) => {
         const result: TableDataWithRaw[] = [];
@@ -1000,15 +1071,15 @@ export default defineComponent({
     });
 
     const sortedData = computed(() => {
-      const data = [...validData.value];
+      const data = mapArrayWithChildren(validData.value);
       if (data.length > 0) {
         if (computedSorter.value?.field) {
           const column = dataColumnMap.get(computedSorter.value.field);
           if (column && column.sortable?.sorter !== true) {
             const { field, direction } = computedSorter.value;
             data.sort((a, b) => {
-              const valueA = a.raw[field];
-              const valueB = b.raw[field];
+              const valueA = getValueByPath(a.raw, field);
+              const valueB = getValueByPath(b.raw, field);
 
               if (
                 column.sortable?.sorter &&
@@ -1026,9 +1097,40 @@ export default defineComponent({
           }
         }
 
-        if (dragState.dragging && dragState.targetPath.length > 0) {
-          const target = spliceFromPath(data, dragState.sourcePath);
-          spliceFromPath(data, dragState.targetPath, target);
+        const { sourcePath, targetPath } = dragState;
+        // drag row to another row
+        if (
+          dragState.dragging &&
+          targetPath.length &&
+          targetPath.toString() !== sourcePath.toString()
+        ) {
+          // same level drag
+          if (
+            sourcePath.length === targetPath.length &&
+            sourcePath.slice(0, -1).toString() ===
+              targetPath.slice(0, -1).toString()
+          ) {
+            let children = data;
+            for (let i = 0; i < sourcePath.length; i++) {
+              const sourceIndex = sourcePath[i];
+              const isLast = i >= sourcePath.length - 1;
+              if (isLast) {
+                const sourceChild = children[sourceIndex];
+                const targetIndex = targetPath[i];
+                if (targetIndex > sourceIndex) {
+                  // move down
+                  children.splice(targetIndex + 1, 0, sourceChild);
+                  children.splice(sourceIndex, 1);
+                } else {
+                  // move up
+                  children.splice(targetIndex, 0, sourceChild);
+                  children.splice(sourceIndex + 1, 1);
+                }
+              } else {
+                children = children[sourceIndex].children ?? [];
+              }
+            }
+          }
         }
       }
       return data;
@@ -1057,31 +1159,31 @@ export default defineComponent({
       return sortedData.value;
     });
 
-    const flattenRawData = computed(() =>
-      flattenData.value.map((item) => item.raw)
-    );
+    const flattenRawData = computed(() => mapRawTableData(flattenData.value));
 
     const getSummaryData = () => {
       return dataColumns.value.reduce((per, column, index) => {
         if (column.dataIndex) {
           if (index === 0) {
-            per[column.dataIndex] = props.summaryText;
+            setValueByPath(per, column.dataIndex, props.summaryText, {
+              addPath: true,
+            });
           } else {
             let count = 0;
             let isNotNumber = false;
             flattenData.value.forEach((data) => {
               if (column.dataIndex) {
-                if (isNumber(data.raw[column.dataIndex])) {
-                  count += data.raw[column.dataIndex];
-                } else if (
-                  !isUndefined(data.raw[column.dataIndex]) &&
-                  !isNull(data.raw[column.dataIndex])
-                ) {
+                const _number = getValueByPath(data.raw, column.dataIndex);
+                if (isNumber(_number)) {
+                  count += _number;
+                } else if (!isUndefined(_number) && !isNull(_number)) {
                   isNotNumber = true;
                 }
               }
             });
-            per[column.dataIndex] = isNotNumber ? '' : count;
+            setValueByPath(per, column.dataIndex, isNotNumber ? '' : count, {
+              addPath: true,
+            });
           }
         }
 
@@ -1089,9 +1191,7 @@ export default defineComponent({
       }, {} as Record<string, any>);
     };
 
-    const getTableDataWithRaw = (
-      data?: TableData[]
-    ): TableDataWithRaw[] | undefined => {
+    const getTableDataWithRaw = (data?: TableData[]): TableDataWithRaw[] => {
       if (data && data.length > 0) {
         return data.map((raw) => {
           return {
@@ -1100,7 +1200,7 @@ export default defineComponent({
           };
         });
       }
-      return undefined;
+      return [];
     };
 
     const summaryData = computed(() => {
@@ -1115,7 +1215,7 @@ export default defineComponent({
         }
         return getTableDataWithRaw([getSummaryData()]);
       }
-      return undefined;
+      return [];
     });
 
     const containerScrollLeft = ref(0);
@@ -1192,12 +1292,50 @@ export default defineComponent({
       emit('rowClick', record.raw, ev);
     };
 
+    const handleRowDblclick = (record: TableDataWithRaw, ev: Event) => {
+      emit('rowDblclick', record.raw, ev);
+    };
+
+    const handleRowContextMenu = (record: TableDataWithRaw, ev: Event) => {
+      emit('rowContextmenu', record.raw, ev);
+    };
+
     const handleCellClick = (
       record: TableDataWithRaw,
       column: TableColumnData,
       ev: Event
     ) => {
       emit('cellClick', record.raw, column, ev);
+    };
+
+    const handleCellMouseEnter = debounce(
+      (record: TableDataWithRaw, column: TableColumnData, ev: Event) => {
+        emit('cellMouseEnter', record.raw, column, ev);
+      },
+      30
+    );
+
+    const handleCellMouseLeave = debounce(
+      (record: TableDataWithRaw, column: TableColumnData, ev: Event) => {
+        emit('cellMouseLeave', record.raw, column, ev);
+      },
+      30
+    );
+
+    const handleCellDblclick = (
+      record: TableDataWithRaw,
+      column: TableColumnData,
+      ev: Event
+    ) => {
+      emit('cellDblclick', record.raw, column, ev);
+    };
+
+    const handleCellContextmenu = (
+      record: TableDataWithRaw,
+      column: TableColumnData,
+      ev: Event
+    ) => {
+      emit('cellContextmenu', record.raw, column, ev);
     };
 
     const handleHeaderClick = (column: TableColumnData, ev: Event) => {
@@ -1417,7 +1555,8 @@ export default defineComponent({
       return (
         <Tr empty>
           <Td colSpan={dataColumns.value.length + operations.value.length}>
-            {slots.empty?.() ?? <Empty />}
+            {slots.empty?.() ??
+              configCtx?.slots.empty?.({ component: 'table' }) ?? <Empty />}
           </Td>
         </Tr>
       );
@@ -1457,7 +1596,7 @@ export default defineComponent({
     const { tableSpan: tableSummarySpan, removedCells: removedSummaryCells } =
       useSpan({
         spanMethod: summarySpanMethod,
-        data: flattenData,
+        data: summaryData,
         columns: allColumns,
       });
 
@@ -1486,7 +1625,7 @@ export default defineComponent({
           onClick={(ev: Event) => handleRowClick(record, ev)}
         >
           {operations.value.map((operation, index) => {
-            const cellId = `${rowIndex}-${index}`;
+            const cellId = `${rowIndex}-${index}-${record.key}`;
             const [rowspan, colspan] = tableSummarySpan.value[cellId] ?? [1, 1];
 
             if (removedSummaryCells.value.includes(cellId)) {
@@ -1508,7 +1647,9 @@ export default defineComponent({
             );
           })}
           {dataColumns.value.map((column, index) => {
-            const cellId = `${rowIndex}-${operations.value.length + index}`;
+            const cellId = `${rowIndex}-${operations.value.length + index}-${
+              record.key
+            }`;
             const [rowspan, colspan] = tableSummarySpan.value[cellId] ?? [1, 1];
 
             if (removedSummaryCells.value.includes(cellId)) {
@@ -1535,6 +1676,18 @@ export default defineComponent({
                 summary
                 // @ts-ignore
                 onClick={(ev: Event) => handleCellClick(record, column, ev)}
+                onDblclick={(ev: Event) =>
+                  handleCellDblclick(record, column, ev)
+                }
+                onMouseenter={(ev: Event) =>
+                  handleCellMouseEnter(record, column, ev)
+                }
+                onMouseleave={(ev: Event) =>
+                  handleCellMouseLeave(record, column, ev)
+                }
+                onContextmenu={(ev: Event) =>
+                  handleCellContextmenu(record, column, ev)
+                }
               />
             );
           })}
@@ -1543,7 +1696,7 @@ export default defineComponent({
     };
 
     const renderSummary = () => {
-      if (summaryData.value) {
+      if (summaryData.value && summaryData.value.length > 0) {
         return (
           <tfoot>
             {summaryData.value.map((data, index) =>
@@ -1553,36 +1706,6 @@ export default defineComponent({
         );
       }
       return null;
-    };
-
-    const renderVirtualListBody = () => {
-      return (
-        <ClientOnly>
-          <VirtualList
-            v-slots={{
-              item: ({
-                item,
-                index,
-              }: {
-                item: TableDataWithRaw;
-                index: number;
-              }) => renderRecord(item, index),
-            }}
-            ref={virtualComRef}
-            class={`${prefixCls}-body`}
-            data={flattenData.value}
-            itemKey="_key"
-            type="table"
-            outerAttrs={{
-              class: `${prefixCls}-element`,
-              style: contentStyle.value,
-            }}
-            {...props.virtualListProps}
-            onResize={handleTbodyResize}
-            onScroll={handleScroll}
-          />
-        </ClientOnly>
-      );
     };
 
     const renderExpandBtn = (
@@ -1625,6 +1748,10 @@ export default defineComponent({
       }
     ) => {
       if (record.hasSubtree) {
+        if (record.children?.length === 0 && showEmptyTree.value) {
+          return renderEmpty();
+        }
+
         return record.children?.map((item, index) =>
           renderRecord(item, index, {
             indentSize,
@@ -1716,19 +1843,23 @@ export default defineComponent({
                 [`${prefixCls}-tr-drag`]: isDragTarget,
               },
               isFunction(props.rowClass)
-                ? props.rowClass(record, rowIndex)
+                ? props.rowClass(record.raw, rowIndex)
                 : props.rowClass,
             ]}
             rowIndex={rowIndex}
             record={record}
-            checked={selectedRowKeys.value?.includes(currentKey)}
+            checked={
+              props.rowSelection && selectedRowKeys.value?.includes(currentKey)
+            }
             // @ts-ignore
             onClick={(ev: Event) => handleRowClick(record, ev)}
+            onDblclick={(ev: Event) => handleRowDblclick(record, ev)}
+            onContextmenu={(ev: Event) => handleRowContextMenu(record, ev)}
             {...(dragType.value === 'row' ? dragSourceEvent : {})}
             {...dragTargetEvent}
           >
             {operations.value.map((operation, index) => {
-              const cellId = `${rowIndex}-${index}`;
+              const cellId = `${rowIndex}-${index}-${record.key}`;
               const [rowspan, colspan] = props.spanAll
                 ? tableSpan.value[cellId] ?? [1, 1]
                 : [1, 1];
@@ -1761,7 +1892,7 @@ export default defineComponent({
             {dataColumns.value.map((column, index) => {
               const cellId = `${rowIndex}-${
                 props.spanAll ? operations.value.length + index : index
-              }`;
+              }-${record.key}`;
               const [rowspan, colspan] = tableSpan.value[cellId] ?? [1, 1];
 
               if (removedCells.value.includes(cellId)) {
@@ -1798,6 +1929,18 @@ export default defineComponent({
                   {...extraProps}
                   // @ts-ignore
                   onClick={(ev: Event) => handleCellClick(record, column, ev)}
+                  onDblclick={(ev: Event) =>
+                    handleCellDblclick(record, column, ev)
+                  }
+                  onMouseenter={(ev: Event) =>
+                    handleCellMouseEnter(record, column, ev)
+                  }
+                  onMouseleave={(ev: Event) =>
+                    handleCellMouseLeave(record, column, ev)
+                  }
+                  onContextmenu={(ev: Event) =>
+                    handleCellContextmenu(record, column, ev)
+                  }
                 />
               );
             })}
@@ -1887,13 +2030,16 @@ export default defineComponent({
 
     const renderContent = () => {
       if (splitTable.value) {
-        const style: CSSProperties = {};
-        if (hasScrollBar.value) {
-          style.overflowY = 'scroll';
+        const top = isNumber(props.stickyHeader)
+          ? `${props.stickyHeader}px`
+          : undefined;
+
+        const mergeOuterClass = [scrollbarProps.value?.outerClass];
+        if (props.stickyHeader) {
+          mergeOuterClass.push(`${prefixCls}-header-sticky`);
         }
-        if (isNumber(props.stickyHeader)) {
-          style.top = `${props.stickyHeader}px`;
-        }
+
+        const mergeOuterStyle = { top, ...scrollbarProps.value?.outerStyle };
 
         const Component = displayScrollbar.value ? Scrollbar : 'div';
 
@@ -1904,14 +2050,22 @@ export default defineComponent({
                 ref={theadComRef}
                 class={[
                   `${prefixCls}-header`,
-                  { [`${prefixCls}-header-sticky`]: props.stickyHeader },
+                  {
+                    [`${prefixCls}-header-sticky`]:
+                      props.stickyHeader && !displayScrollbar.value,
+                  },
                 ]}
-                style={style}
+                style={{
+                  overflowY: hasScrollBar.value ? 'scroll' : undefined,
+                  top: !displayScrollbar.value ? top : undefined,
+                }}
                 {...(scrollbar.value
                   ? {
                       hide: flattenData.value.length !== 0,
                       disableVertical: true,
                       ...scrollbarProps.value,
+                      outerClass: mergeOuterClass,
+                      outerStyle: mergeOuterStyle,
                     }
                   : undefined)}
               >
@@ -1931,7 +2085,7 @@ export default defineComponent({
               </Component>
             )}
             <ResizeObserver onResize={handleTbodyResize}>
-              {isVirtualList.value ? (
+              {isVirtualList.value && flattenData.value.length ? (
                 <VirtualList
                   v-slots={{
                     item: ({
@@ -1957,6 +2111,7 @@ export default defineComponent({
                     style: contentStyle.value,
                   }}
                   paddingPosition="list"
+                  height="auto"
                   {...props.virtualListProps}
                   onScroll={onTbodyScroll}
                 />
@@ -1995,7 +2150,7 @@ export default defineComponent({
                 </Component>
               )}
             </ResizeObserver>
-            {summaryData.value && summaryData.value.length && (
+            {summaryData.value && summaryData.value.length > 0 && (
               <div
                 ref={summaryRef}
                 class={`${prefixCls}-tfoot`}
@@ -2037,7 +2192,9 @@ export default defineComponent({
             />
             {props.showHeader && renderHeader()}
             {renderBody()}
-            {summaryData.value && summaryData.value.length && renderSummary()}
+            {summaryData.value &&
+              summaryData.value.length > 0 &&
+              renderSummary()}
           </table>
         </ResizeObserver>
       );

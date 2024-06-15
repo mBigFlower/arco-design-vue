@@ -6,6 +6,7 @@ import { configProviderInjectionKey } from '../config-provider/context';
 
 export default defineComponent({
   name: 'Empty',
+  inheritAttrs: false,
   props: {
     /**
      * @zh 描述内容
@@ -17,24 +18,37 @@ export default defineComponent({
      * @en The src of the Custom Image
      */
     imgSrc: String,
+    /**
+     * @zh 是否在 ConfigProvider 中使用
+     * @en Whether to use in ConfigProvider
+     * @version 2.47.0
+     */
+    inConfigProvider: {
+      type: Boolean,
+      default: false,
+    },
   },
   /**
    * @zh 图片/图标
    * @en Image/Icon
    * @slot image
    */
-  setup(props, { slots }) {
+  setup(props, { slots, attrs }) {
     const prefixCls = getPrefixCls('empty');
     const { t } = useI18n();
     const configCtx = inject(configProviderInjectionKey, undefined);
 
     return () => {
-      if (configCtx?.slots.empty && !(slots.image || props.imgSrc)) {
-        return configCtx.slots.empty();
+      if (
+        !props.inConfigProvider &&
+        configCtx?.slots.empty &&
+        !(slots.image || props.imgSrc || props.description)
+      ) {
+        return configCtx.slots.empty({ component: 'empty' });
       }
 
       return (
-        <div class={prefixCls}>
+        <div class={prefixCls} {...attrs}>
           <div class={`${prefixCls}-image`}>
             {slots.image?.() ??
               (props.imgSrc ? (

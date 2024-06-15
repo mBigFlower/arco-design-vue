@@ -1,3 +1,4 @@
+
 ```yaml
 meta:
   type: Component
@@ -20,6 +21,8 @@ description: A two-column multi-select component that moves elements from one co
 
 @import ./__demo__/tree.md
 
+@import ./__demo__/custom-header.md
+
 ## API
 
 
@@ -38,6 +41,8 @@ description: A two-column multi-select component that moves elements from one co
 |show-search|Whether to show the search input|`boolean`|`false`||
 |show-select-all|Whether show select all checkbox on the header|`boolean`|`true`|2.39.0|
 |title|The title of the source and target selection boxes|`string[]`|`['Source', 'Target']`||
+|source-input-search-props|Search box configuration for source selection box|`object`|`-`|2.51.1|
+|target-input-search-props|Search box configuration for target selection box|`object`|`-`|2.51.1|
 ### `<transfer>` Events
 
 |Event Name|Description|Parameters|
@@ -50,7 +55,11 @@ description: A two-column multi-select component that moves elements from one co
 |Slot Name|Description|Parameters|version|
 |---|---|---|:---|
 |source|Source content|data: `TransferItem[]`<br>selectedKeys: `string[]`<br>onSelect: `(value: string[]) => void`|2.39.0|
+|source-title|Source Header|countTotal: `number`<br>countSelected: `number`<br>searchValue: `string`<br>checked: `boolean`<br>indeterminate: `boolean`<br>onSelectAllChange: `(checked:boolean) => void`<br>onClear: `() => void`|2.45.0|
+|to-target-icon|To target icon slot|-|2.52.0|
+|to-source-icon|To source icon slot|-|2.52.0|
 |target|Target content|data: `TransferItem[]`<br>selectedKeys: `string[]`<br>onSelect: `(value: string[]) => void`|2.39.0|
+|target-title|Target Header|countTotal: `number`<br>countSelected: `number`<br>searchValue: `string`<br>checked: `boolean`<br>indeterminate: `boolean`<br>onSelectAllChange: `(checked:boolean) => void`<br>onClear: `() => void`|2.45.0|
 |item|Option|value: `string`<br>label: `string`||
 
 

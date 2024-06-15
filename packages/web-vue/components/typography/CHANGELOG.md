@@ -2,6 +2,24 @@
 changelog: true
 ```
 
+## 2.51.0
+
+`2023-09-01`
+
+### 🐛 BugFix
+
+- Fix the problem of missing related component styles when importing on demand ([#2682](https://github.com/arco-design/arco-design-vue/pull/2682))
+
+
+## 2.49.2
+
+`2023-07-28`
+
+### 🐛 BugFix
+
+- enhanced typography styles for handling long words ([#2583](https://github.com/arco-design/arco-design-vue/pull/2583))
+
+
 ## 2.41.0
 
 `2022-12-30`

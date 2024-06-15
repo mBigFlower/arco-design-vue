@@ -321,6 +321,23 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    /**
+     * @zh 是否在滚动时关闭弹出框
+     * @en Whether to close the popover when scrolling
+     * @version 2.46.0
+     */
+    scrollToClose: {
+      type: Boolean,
+      default: false,
+    },
+    /**
+     * @zh 滚动阈值，当滚动距离超过该值时触发关闭
+     * @en Scroll threshold, trigger close when the scroll distance exceeds this value
+     */
+    scrollToCloseDistance: {
+      type: Number,
+      default: 0,
+    },
   },
   emits: {
     'update:popupVisible': (visible: boolean) => true,
@@ -378,6 +395,9 @@ export default defineComponent({
       left: 0,
     });
 
+    let scrollPosition: [number, number] | null = null;
+    let windowScrollPosition: [number, number] | null = null;
+
     const computedVisible = computed(
       () => props.popupVisible ?? popupVisible.value
     );
@@ -392,6 +412,7 @@ export default defineComponent({
 
     let delayTimer = 0;
     let outsideListener = false;
+    let windowListener = false;
 
     const cleanDelayTimer = () => {
       if (delayTimer) {
@@ -489,6 +510,11 @@ export default defineComponent({
           });
         }
       };
+
+      if (!visible) {
+        scrollPosition = null;
+        windowScrollPosition = null;
+      }
 
       if (delay) {
         cleanDelayTimer();
@@ -626,9 +652,49 @@ export default defineComponent({
       changeVisible(false);
     };
 
-    const handleScroll = throttleByRaf(() => {
+    const isExceedThreshold = (
+      oldPosition: [number, number],
+      element: HTMLElement
+    ) => {
+      const [scrollTop, scrollLeft] = oldPosition;
+      const { scrollTop: newScrollTop, scrollLeft: newScrollLeft } = element;
+      return (
+        Math.abs(newScrollTop - scrollTop) >= props.scrollToCloseDistance ||
+        Math.abs(newScrollLeft - scrollLeft) >= props.scrollToCloseDistance
+      );
+    };
+
+    const handleScroll = throttleByRaf((e) => {
       if (computedVisible.value) {
-        updatePopupStyle();
+        if (props.scrollToClose || configCtx?.scrollToClose) {
+          const element = e.target as HTMLElement;
+          if (!scrollPosition) {
+            scrollPosition = [element.scrollTop, element.scrollLeft];
+          }
+          if (isExceedThreshold(scrollPosition, element)) {
+            changeVisible(false);
+          } else {
+            updatePopupStyle();
+          }
+        } else {
+          updatePopupStyle();
+        }
+      }
+    });
+
+    const removeWindowScroll = () => {
+      off(window, 'scroll', onWindowScroll);
+      windowListener = false;
+    };
+
+    const onWindowScroll = throttleByRaf((e) => {
+      const element = e.target.documentElement;
+      if (!windowScrollPosition) {
+        windowScrollPosition = [element.scrollTop, element.scrollLeft];
+      }
+      if (isExceedThreshold(windowScrollPosition, element)) {
+        changeVisible(false);
+        removeWindowScroll();
       }
     });
 
@@ -666,6 +732,11 @@ export default defineComponent({
           on(document.documentElement, 'mousedown', handleOutsideClick);
           outsideListener = true;
         }
+      }
+
+      if (props.scrollToClose || configCtx?.scrollToClose) {
+        on(window, 'scroll', onWindowScroll);
+        windowListener = true;
       }
 
       if (props.updateAtScroll || configCtx?.updateAtScroll) {
@@ -736,6 +807,9 @@ export default defineComponent({
       destroyResizeObserver();
       if (outsideListener) {
         removeOutsideListener();
+      }
+      if (windowListener) {
+        removeWindowScroll();
       }
       if (scrollElements) {
         for (const item of scrollElements) {

@@ -86,7 +86,7 @@ import {
 } from 'vue';
 import { getPrefixCls } from '../_utils/global-config';
 import ClientOnly from '../_components/client-only';
-import ArcoButton from '../button';
+import ArcoButton, { ButtonProps } from '../button';
 import IconHover from '../_components/icon-hover.vue';
 import IconClose from '../icon/icon-close';
 import { useI18n } from '../locale';
@@ -190,7 +190,7 @@ export default defineComponent({
      * @version 2.9.0
      */
     okButtonProps: {
-      type: Object,
+      type: Object as PropType<ButtonProps>,
     },
     /**
      * @zh 取消按钮的Props
@@ -198,7 +198,7 @@ export default defineComponent({
      * @version 2.9.0
      */
     cancelButtonProps: {
-      type: Object,
+      type: Object as PropType<ButtonProps>,
     },
     /**
      * @zh 关闭时是否卸载节点
@@ -305,13 +305,15 @@ export default defineComponent({
     /**
      * @zh 点击确定按钮时触发
      * @en Triggered when the OK button is clicked
+     * @property {MouseEvent} ev
      */
-    'ok': () => true,
+    'ok': (e: Event) => true,
     /**
      * @zh 点击取消、关闭按钮时触发
      * @en Triggered when the cancel or close button is clicked
+     * @property {MouseEvent | KeyboardEvent} ev
      */
-    'cancel': () => true,
+    'cancel': (e: Event) => true,
     /**
      * @zh 抽屉打开后（动画结束）触发
      * @en Triggered after the drawer is opened (the animation ends)
@@ -372,7 +374,7 @@ export default defineComponent({
 
     const handleGlobalKeyDown = (ev: KeyboardEvent) => {
       if (props.escToClose && ev.key === KEYBOARD_KEY.ESC && isLastDialog()) {
-        handleCancel();
+        handleCancel(ev);
       }
     };
 
@@ -409,7 +411,7 @@ export default defineComponent({
       emit('update:visible', false);
     };
 
-    const handleOk = async () => {
+    const handleOk = async (e: Event) => {
       const currentPromiseNumber = promiseNumber;
       const closed = await new Promise<boolean>(
         // eslint-disable-next-line no-async-promise-executor
@@ -438,7 +440,7 @@ export default defineComponent({
 
       if (currentPromiseNumber === promiseNumber) {
         if (closed) {
-          emit('ok');
+          emit('ok', e);
           close();
         } else if (_okLoading.value) {
           _okLoading.value = false;
@@ -446,20 +448,20 @@ export default defineComponent({
       }
     };
 
-    const handleCancel = () => {
+    const handleCancel = (e: Event) => {
       let result = true;
       if (isFunction(props.onBeforeCancel)) {
         result = props.onBeforeCancel() ?? false;
       }
       if (result) {
-        emit('cancel');
+        emit('cancel', e);
         close();
       }
     };
 
-    const handleMask = () => {
+    const handleMask = (e: Event) => {
       if (props.maskClosable) {
-        handleCancel();
+        handleCancel(e);
       }
     };
 

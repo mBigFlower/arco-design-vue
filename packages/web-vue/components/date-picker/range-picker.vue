@@ -60,6 +60,7 @@ import { Dayjs } from 'dayjs';
 import {
   computed,
   defineComponent,
+  inject,
   nextTick,
   onUnmounted,
   PropType,
@@ -112,6 +113,7 @@ import { getReturnRangeValue } from './hooks/use-value-format';
 import { Size } from '../_utils/constant';
 import { useFormItem } from '../_hooks/use-form-item';
 import { useI18n } from '../locale';
+import { configProviderInjectionKey } from '../config-provider/context';
 
 export default defineComponent({
   name: 'RangePicker',
@@ -248,9 +250,7 @@ export default defineComponent({
       default: true,
     },
     popupContainer: {
-      type: [String, Object] as PropType<
-        string | HTMLElement | null | undefined
-      >,
+      type: [String, Object] as PropType<string | HTMLElement>,
     },
     locale: {
       type: Object as PropType<Record<string, any>>,
@@ -311,6 +311,14 @@ export default defineComponent({
     disabledInput: {
       type: Boolean,
       default: false,
+    },
+    /**
+     * @zh 是否启用缩写
+     * @en Whether to enable abbreviation
+     */
+    abbreviation: {
+      type: Boolean,
+      default: true,
     },
   },
   emits: {
@@ -426,8 +434,13 @@ export default defineComponent({
     } = toRefs(props);
 
     const { locale: globalLocal } = useI18n();
+    const configCtx = inject(configProviderInjectionKey, undefined);
     watchEffect(() => {
       initializeDateLocale(globalLocal.value, dayStartOfWeek.value);
+    });
+
+    const mergedExchangeTime = computed(() => {
+      return !(!exchangeTime.value || !(configCtx?.exchangeTime ?? true));
     });
 
     const {
@@ -656,13 +669,8 @@ export default defineComponent({
     );
 
     watch(panelVisible, (newVisible) => {
-      if (mode.value === 'year') {
-        startHeaderMode.value = 'year';
-        endHeaderMode.value = 'year';
-      } else {
-        startHeaderMode.value = undefined;
-        endHeaderMode.value = undefined;
-      }
+      startHeaderMode.value = undefined;
+      endHeaderMode.value = undefined;
 
       setProcessValue(undefined);
       setPreviewValue(undefined);
@@ -705,6 +713,17 @@ export default defineComponent({
       }
     }
 
+    function getSortedDayjsArrayByExchangeTimeOrNot(newValue: Dayjs[]) {
+      let sortedValue = getSortedDayjsArray(newValue);
+      if (hasTime.value && !mergedExchangeTime.value) {
+        sortedValue = [
+          getMergedOpValue(sortedValue[0], newValue[0]),
+          getMergedOpValue(sortedValue[1], newValue[1]),
+        ];
+      }
+      return sortedValue;
+    }
+
     function confirm(
       value: Array<Dayjs | undefined> | undefined,
       showPanel?: boolean,
@@ -720,14 +739,7 @@ export default defineComponent({
       let newValue = value ? [...value] : undefined;
 
       if (isCompleteRangeValue(newValue)) {
-        let sortedValue = getSortedDayjsArray(newValue);
-        if (hasTime.value && !exchangeTime.value) {
-          sortedValue = [
-            getMergedOpValue(sortedValue[0], newValue[0]),
-            getMergedOpValue(sortedValue[1], newValue[1]),
-          ];
-        }
-        newValue = sortedValue;
+        newValue = getSortedDayjsArrayByExchangeTimeOrNot(newValue);
       }
 
       emitChange(newValue, emitOk);
@@ -761,7 +773,7 @@ export default defineComponent({
 
       let newValue = [...value];
       if (isCompleteRangeValue(newValue)) {
-        newValue = getSortedDayjsArray(newValue);
+        newValue = getSortedDayjsArrayByExchangeTimeOrNot(newValue);
       }
 
       setProcessValue(newValue);
@@ -850,6 +862,8 @@ export default defineComponent({
         select(newValue);
         if (!isCompleteRangeValue(newValue)) {
           focusedIndex.value = nextFocusedIndex.value;
+        } else {
+          focusedIndex.value = 0;
         }
       }
     }
@@ -993,6 +1007,7 @@ export default defineComponent({
         'disabledDate',
         'disabledTime',
         'hideTrigger',
+        'abbreviation',
       ]),
       prefixCls,
       format: parseValueFormat.value,

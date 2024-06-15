@@ -51,21 +51,34 @@ export const methods = {
   startOf(time: Dayjs, unit: OpUnitType) {
     return time.startOf(unit);
   },
+  /**
+   * Similar to `startOf`, returns start date of a week; used in week pickers
+   * @param time Selected date
+   * @param weekStart Start day of a week
+   * @returns Start date of the week containing the selected date
+   */
+  startOfWeek(time: Dayjs, weekStart: number) {
+    const currentDay = time.day();
+    let startOfWeek = time.subtract(currentDay - weekStart, 'day');
+    if (startOfWeek.isAfter(time)) {
+      startOfWeek = startOfWeek.subtract(7, 'day');
+    }
+    return startOfWeek;
+  },
   endOf(time: Dayjs, unit: OpUnitType) {
     return time.endOf(unit);
   },
   set(time: Dayjs, unit: UnitType, value: number) {
     return time.set(unit, value);
   },
-  isSameWeek(
-    date1: Dayjs,
-    date2: Dayjs,
-    weekStart: number,
-    localeName: string
-  ) {
-    return date1
-      .locale({ ...dayjs.Ls[localeName.toLocaleLowerCase()], weekStart })
-      .isSame(date2, 'week');
+  isSameWeek(date1: Dayjs, date2: Dayjs, weekStart: number) {
+    // calculate week number of the given date considering the given start of week
+    const getWeek = (date: Dayjs) => {
+      const day = date.day();
+      const diff = day - weekStart + (day < weekStart ? 7 : 0);
+      return date.subtract(diff, 'day').week();
+    };
+    return getWeek(date1) === getWeek(date2);
   },
 };
 
@@ -161,7 +174,10 @@ export function getDayjsValue(
       if (isQuarter(format)) {
         return dayjs(parseQuarterToMonth(value), format.replace(/\[Q]Q/, 'MM'));
       }
-      return dayjs(value, format);
+
+      if (dayjs(value, format).isValid()) {
+        return dayjs(value, format);
+      }
     }
 
     return dayjs(value);
@@ -202,4 +218,24 @@ export function getDateValue(
 
 export function initializeDateLocale(localeName: string, weekStart: number) {
   dayjs.locale({ ...dayjs.Ls[localeName.toLocaleLowerCase()], weekStart });
+}
+
+export function pickDataAttributes<
+  T extends Record<string, any>,
+  K extends keyof T
+>(obj: T): { [key in K]: any } {
+  const clone = {} as { [key in K]: any };
+
+  obj &&
+    Object.keys(obj).forEach((key) => {
+      const k = String(key);
+      if (k.indexOf('data-') === 0) {
+        clone[k] = obj[k];
+      }
+      if (k.indexOf('aria-') === 0) {
+        clone[k] = obj[k];
+      }
+    });
+
+  return clone;
 }

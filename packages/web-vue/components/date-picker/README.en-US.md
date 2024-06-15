@@ -73,11 +73,12 @@ description: Choose a date. Support year, month, week, day type, support range s
 |disabled-time|Unselectable time|`(current: Date) => DisabledTimeProps`|`-`||
 |picker-value **(v-model)**|Date displayed on the panel|`Date \| string \| number`|`-`||
 |default-picker-value|The date displayed on the panel by default|`Date \| string \| number`|`-`||
-|popup-container|Mount container for pop-up box|`string \| HTMLElement \| null \| undefined`|`-`||
+|popup-container|Mount container for pop-up box|`string \| HTMLElement`|`-`||
 |value-format|The format of the value, valid for `value` `defaultValue` `pickerValue` `defaultPickerValue` and the return value in the event, supports setting as timestamp, Date and string (refer to [String parsing format](#string-parsing-format) ). If not specified, it will be formatted as a string, in the same format as `format`.|`'timestamp' \| 'Date' \| string`|`-`|2.16.0|
 |preview-shortcut|Whether to preview the result of the shortcut|`boolean`|`true`|2.28.0|
 |show-confirm-btn|Whether to show the confirm button, always show when `showTime = true`.|`boolean`|`false`|2.29.0|
 |disabled-input|Whether input is disabled with the keyboard.|`boolean`|`false`|2.43.0|
+|abbreviation|Whether to enable abbreviation|`boolean`|`true`|2.45.0|
 ### `Common` Events
 
 |Event Name|Description|Parameters|
@@ -115,6 +116,8 @@ description: Choose a date. Support year, month, week, day type, support range s
 |day-start-of-week|The first day of the week starts on the day of the week, 0-Sunday, 1-Monday, and so on.|`0 \| 1 \| 2 \| 3 \| 4 \| 5 \| 6`|`0`|2-6 from 2.21.0|
 |show-time|Whether to increase time selection|`boolean`|`false`||
 |time-picker-props|Time display parameters, refer to [TimePickerProps](/vue/component/time-picker)|`Partial<TimePickerProps>`|`-`||
+|disabled|Whether to disable|`boolean`|`false`||
+|disabled-date|Unselectable date|`(current?: Date) => boolean`|`-`||
 |disabled-time|Unselectable time|`(current: Date) => DisabledTimeProps`|`-`||
 |show-now-btn|Whether to display `showTime`, select the button of the current time|`boolean`|`true`||
 
@@ -189,6 +192,7 @@ description: Choose a date. Support year, month, week, day type, support range s
 |separator|The segmentation symbol in the input box of the range selector|`string`|`-`||
 |exchange-time|Whether the time will be exchanged, by default time will affect and participate in the ordering of start and end values, if you want to fix the time order, you can turn it off.|`boolean`|`true`|2.25.0|
 |disabled-input|Whether input is disabled with the keyboard.|`boolean`|`false`|2.43.0|
+|abbreviation|Whether to enable abbreviation|`boolean`|`true`||
 ### `<range-picker>` Events
 
 |Event Name|Description|Parameters|
@@ -248,3 +252,9 @@ Format|Output|Description
 `Do`|1st... 3st|Day of month with serial number
 `X`|1410715640.579|Unix timestamp
 `x`|1410715640579|Unix millisecond timestamp
+
+
+## FAQ
+
+### About the `locale` field
+The `locale` field can be configured using the language pack provided by the component library.

@@ -96,6 +96,7 @@ description: 用于数据收集展示、分析整理、操作处理。
 |default-expand-all-rows|是否默认展开所有的行|`boolean`|`false`|2.25.0|
 |sticky-header|是否开启表头吸顶|`boolean\|number`|`false`|2.30.0|
 |scrollbar|是否开启虚拟滚动条|`boolean \| ScrollbarProps`|`true`|2.38.0|
+|show-empty-tree|是否展示空子树|`boolean`|`false`|2.51.0|
 ### `<table>` Events
 
 |事件名|描述|参数|版本|
@@ -110,10 +111,16 @@ description: 用于数据收集展示、分析整理、操作处理。
 |page-change|表格分页发生改变时触发|page: `number`||
 |page-size-change|表格每页数据数量发生改变时触发|pageSize: `number`||
 |change|表格数据发生变化时触发|data: `TableData[]`<br>extra: `TableChangeExtra`<br>currentData: `TableData[]`|2.40.0 增加 currentData|
+|cell-mouse-enter|单元格 hover 进入时触发|record: `TableData`<br>column: `TableColumnData`<br>ev: `Event`||
+|cell-mouse-leave|单元格 hover 退出时触发|record: `TableData`<br>column: `TableColumnData`<br>ev: `Event`||
 |cell-click|点击单元格时触发|record: `TableData`<br>column: `TableColumnData`<br>ev: `Event`||
 |row-click|点击行数据时触发|record: `TableData`<br>ev: `Event`||
 |header-click|点击表头数据时触发|column: `TableColumnData`<br>ev: `Event`||
 |column-resize|调整列宽时触发|dataIndex: `string`<br>width: `number`|2.28.0|
+|row-dblclick|双击行数据时触发|record: `TableData`<br>ev: `Event`||
+|cell-dblclick|双击单元格时触发|record: `TableData`<br>column: `TableColumnData`<br>ev: `Event`||
+|row-contextmenu|右击行数据时触发|record: `TableData`<br>ev: `Event`||
+|cell-contextmenu|右击单元格时触发|record: `TableData`<br>column: `TableColumnData`<br>ev: `Event`||
 ### `<table>` Methods
 
 |方法名|描述|参数|返回值|版本|
@@ -155,6 +162,7 @@ description: 用于数据收集展示、分析整理、操作处理。
 |data-index|列信息的标识，对应TableData中的数据|`string`|`-`||
 |title|列标题|`string`|`-`||
 |width|列宽度|`number`|`-`||
+|min-width|最小列宽|`number`|`-`||
 |align|对齐方向|`TableColumnData['align']`|`-`||
 |fixed|固定位置|`TableColumnData['fixed']`|`-`||
 |ellipsis|是否显示为省略|`boolean`|`false`||
@@ -245,6 +253,7 @@ type Sorter = { filed: string; direction: 'ascend' | 'descend' } | Record<string
 |dataIndex|列信息的标识，对应 `TableData` 中的数据|`string`|`-`||
 |title|列标题|`string \| RenderFunction`|`-`||
 |width|列宽度|`number`|`-`||
+|minWidth|最小列宽|`number`|`-`||
 |align|对齐方向|`'left' \| 'center' \| 'right'`|`-`||
 |fixed|固定位置|`'left' \| 'right'`|`-`||
 |ellipsis|是否显示省略号|`boolean`|`false`||
@@ -388,3 +397,9 @@ table 组件提供了内部元素的自定义插槽，这些插槽不同于普�
   </td>
 </template>
 ```
+
+### 2. 关于数据中的 `row-key` 设置
+
+表格默认会通过数据中设置的 `key` 字段来唯一定位行数据，在提供数据时请确保行数据中都设置了 `key` 字段。这个字段在开启选择器等功能时为必要字段，如果想要更换默认的字段名，可以修改 `row-key` 进行设置。
+
+

@@ -98,6 +98,7 @@ description: It is used for data collection, display, analysis and processing, a
 |default-expand-all-rows|Whether to expand all rows by default|`boolean`|`false`|2.25.0|
 |sticky-header|Whether to open the sticky header|`boolean\|number`|`false`|2.30.0|
 |scrollbar|Whether to enable virtual scroll bar|`boolean \| ScrollbarProps`|`true`|2.38.0|
+|show-empty-tree|Whether to display empty subtrees|`boolean`|`false`|2.51.0|
 ### `<table>` Events
 
 |Event Name|Description|Parameters|version|
@@ -112,10 +113,16 @@ description: It is used for data collection, display, analysis and processing, a
 |page-change|Triggered when the table pagination changes|page: `number`||
 |page-size-change|Triggered when the number of data per page of the table changes|pageSize: `number`||
 |change|Triggered when table data changes|data: `TableData[]`<br>extra: `TableChangeExtra`<br>currentData: `TableData[]`|2.40.0 增加 currentData|
+|cell-mouse-enter|Triggered when hovering into a cell|record: `TableData`<br>column: `TableColumnData`<br>ev: `Event`||
+|cell-mouse-leave|Triggered when hovering out of a cell|record: `TableData`<br>column: `TableColumnData`<br>ev: `Event`||
 |cell-click|Triggered when a cell is clicked|record: `TableData`<br>column: `TableColumnData`<br>ev: `Event`||
 |row-click|Triggered when row data is clicked|record: `TableData`<br>ev: `Event`||
 |header-click|Triggered when the header data is clicked|column: `TableColumnData`<br>ev: `Event`||
 |column-resize|Triggered when column width is adjusted|dataIndex: `string`<br>width: `number`|2.28.0|
+|row-dblclick|Triggered when row data is double clicked|record: `TableData`<br>ev: `Event`||
+|cell-dblclick|Triggered when a cell is double clicked|record: `TableData`<br>column: `TableColumnData`<br>ev: `Event`||
+|row-contextmenu|Triggered when row data is right clicked|record: `TableData`<br>ev: `Event`||
+|cell-contextmenu|Triggered when a cell is right clicked|record: `TableData`<br>column: `TableColumnData`<br>ev: `Event`||
 ### `<table>` Methods
 
 |Method|Description|Parameters|Return|version|
@@ -157,6 +164,7 @@ description: It is used for data collection, display, analysis and processing, a
 |data-index|Identifies the column information, corresponding to the data in TableData|`string`|`-`||
 |title|Column title|`string`|`-`||
 |width|Column width|`number`|`-`||
+|min-width|Minimum column width|`number`|`-`||
 |align|Alignment direction|`TableColumnData['align']`|`-`||
 |fixed|Fixed position|`TableColumnData['fixed']`|`-`||
 |ellipsis|Whether to display as omitted|`boolean`|`false`||
@@ -247,6 +255,7 @@ type Sorter = { filed: string; direction: 'ascend' | 'descend' } | Record<string
 |dataIndex|The identifier of the column information, corresponding to the data in `TableData`|`string`|`-`||
 |title|Column header|`string \| RenderFunction`|`-`||
 |width|Column width|`number`|`-`||
+|minWidth|Minimum column width|`number`|`-`||
 |align|Alignment direction|`'left' \| 'center' \| 'right'`|`-`||
 |fixed|Fixed position|`'left' \| 'right'`|`-`||
 |ellipsis|Whether to show ellipsis|`boolean`|`false`||
@@ -350,6 +359,8 @@ type Sorter = { filed: string; direction: 'ascend' | 'descend' } | Record<string
 
 ## FAQ
 
+
+
 The table component provides custom slots for internal elements, which are different from normal slots and have certain restrictions on what the user can pass in.
 Because the slot of vue does not provide a way to send out children and render them in the slot, we have done some special processing for the element slot in the table, and will append the original children to the content passed in by the user to ensure that children Normal rendering of the element.
 At this point, the user needs to pay attention that when custom rendering in the element slot, a single empty element needs to be passed in, and content cannot be added to the passed in element (refer to Example 1).
@@ -388,3 +399,7 @@ example 2：
   </td>
 </template>
 ```
+
+### 2. About the `row-key` setting in the data
+
+By default, the table will uniquely locate the row data through the `key` field set in the data. When providing data, please ensure that the `key` field is set in the row data. This field is a necessary field when enabling functions such as selectors. If you want to change the default field name, you can modify `row-key` to set it.

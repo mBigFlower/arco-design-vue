@@ -80,7 +80,7 @@ description: 对于文件夹、分类目录、组织架构等层级较多的内�
 |select|点击树节点时触发|selectedKeys: `Array<string \| number>`<br>data: `{ selected?: boolean; selectedNodes: TreeNodeData[]; node?: TreeNodeData; e?: Event; }`|
 |check|点击树节点复选框时触发。`halfCheckedKeys` 和 `halfCheckedNodes` 从 `2.19.0` 开始支持。|checkedKeys: `Array<string \| number>`<br>data: `{ checked?: boolean; checkedNodes: TreeNodeData[]; node?: TreeNodeData; e?: Event; halfCheckedKeys: (string \| number)[]; halfCheckedNodes: TreeNodeData[]; }`|
 |expand|展开/关闭|expandKeys: `Array<string \| number>`<br>data: `{ expanded?: boolean; expandNodes: TreeNodeData[]; node?: TreeNodeData; e?: Event; }`|
-|drag-start|节点开始拖拽|-|
+|drag-start|节点开始拖拽|ev: `DragEvent`<br>node: `TreeNodeData`|
 |drag-end|节点结束拖拽|ev: `DragEvent`<br>node: `TreeNodeData`|
 |drag-over|节点被拖拽至可释放目标|ev: `DragEvent`<br>node: `TreeNodeData`|
 |drag-leave|节点离开可释放目标|ev: `DragEvent`<br>node: `TreeNodeData`|
@@ -104,7 +104,7 @@ description: 对于文件夹、分类目录、组织架构等层级较多的内�
 
 |插槽名|描述|参数|版本|
 |---|:---:|---|:---|
-|title|标题|-||
+|title|标题|title: `string`||
 |extra|渲染额外的节点内容|-||
 |drag-icon|定制 drag 图标|node: `TreeNodeData`||
 |loading-icon|定制 loading 图标|-||
@@ -126,10 +126,10 @@ description: 对于文件夹、分类目录、组织架构等层级较多的内�
 |checkable|是否显示多选框|`boolean`|`false`|
 |draggable|是否可以拖拽|`boolean`|`false`|
 |isLeaf|是否是叶子节点。动态加载时有效|`boolean`|`false`|
-|icon|节点的图标|`() => VNode[]`|`-`|
-|switcherIcon|定制 switcher 图标，优先级大于 tree|`() => VNode[]`|`-`|
-|loadingIcon|定制 loading 图标，优先级大于 tree|`() => VNode[]`|`-`|
-|dragIcon|定制 drag 图标，优先级大于 tree|`() => VNode[]`|`-`|
+|icon|节点的图标|`() => VNode`|`-`|
+|switcherIcon|定制 switcher 图标，优先级大于 tree|`() => VNode`|`-`|
+|loadingIcon|定制 loading 图标，优先级大于 tree|`() => VNode`|`-`|
+|dragIcon|定制 drag 图标，优先级大于 tree|`() => VNode`|`-`|
 |children|子节点|`TreeNodeData[]`|`-`|
 
 

@@ -36,6 +36,8 @@ description: Refers to the use of multi-level classification to separate the opt
 
 @import ./__demo__/panel.md
 
+@import ./__demo__/virtual.md
+
 ## API
 
 
@@ -60,7 +62,7 @@ description: Refers to the use of multi-level classification to separate the opt
 |default-popup-visible|Whether to display the dropdown by default (uncontrolled state)|`boolean`|`false`||
 |placeholder|Placeholder|`string`|`-`||
 |filter-option|Custom options filter method|`(inputValue: string, option: CascaderOption) => boolean`|`-`||
-|popup-container|Mount container for popup|`string \| HTMLElement \| null \| undefined`|`-`||
+|popup-container|Mount container for popup|`string \| HTMLElement`|`-`||
 |max-tag-count|In multi-select mode, the maximum number of labels displayed. 0 means unlimited|`number`|`0`||
 |format-label|Format display content|`(options: CascaderOption[]) => string`|`-`||
 |trigger-props|Trigger props of the drop-down menu|`TriggerProps`|`-`||
@@ -73,6 +75,7 @@ description: Refers to the use of multi-level classification to separate the opt
 |value-key|Used to determine the option key value attribute name|`string`|`'value'`|2.29.0|
 |fallback|Options that do not exist in custom values|`boolean\| ((    value:      \| string      \| number      \| Record<string, unknown>      \| (string \| number \| Record<string, unknown>)[]  ) => string)`|`true`|2.29.0|
 |expand-child|whether to expand the submenu|`boolean`|`false`|2.29.0|
+|virtual-list-props|Pass the virtual list attribute, pass in this parameter to turn on virtual scrolling [VirtualListProps](#VirtualListProps)|`VirtualListProps`|`-`|2.49.0|
 ### `<cascader>` Events
 
 |Event Name|Description|Parameters|

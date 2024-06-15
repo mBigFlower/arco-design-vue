@@ -1,12 +1,15 @@
 import type { CSSProperties } from 'vue';
 import type { TriggerPosition } from '../_utils/constant';
 import { isArray } from '../_utils/is';
+import { getDocumentSize, Size } from '../_utils/dom';
 import type { TriggerPopupTranslate } from './interface';
 
-const getViewPortSize = () => {
+const getViewPortSize = (): Size => {
+  const { height, width } = getDocumentSize();
+
   return {
-    width: document.documentElement.clientWidth || window.innerWidth,
-    height: document.documentElement.clientHeight || window.innerHeight,
+    width: Math.min(width, window.innerWidth),
+    height: Math.min(height, window.innerHeight),
   };
 };
 
@@ -365,7 +368,7 @@ export const getTransformOrigin = (position: TriggerPosition) => {
   let originY = '0';
   if (['left', 'right'].includes(position)) {
     originY = '50%';
-  } else if (['top', 'tl', 'tr', 'lt', 'rt'].includes(position)) {
+  } else if (['top', 'tl', 'tr', 'lb', 'rb'].includes(position)) {
     originY = '100%';
   }
   return `${originX} ${originY}`;

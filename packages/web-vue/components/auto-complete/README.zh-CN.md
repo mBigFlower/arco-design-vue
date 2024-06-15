@@ -28,6 +28,7 @@ description: 输入框的自动补全功能。
 |filter-option|自定义选项过滤方法|`FilterOption`|`true`||
 |trigger-props|trigger 组件属性|`TriggerProps`|`-`|2.14.0|
 |allow-clear|是否允许清空输入框|`boolean`|`false`|2.23.0|
+|virtual-list-props|传递虚拟列表属性，传入此参数以开启虚拟滚动 [VirtualListProps](#VirtualListProps)|`VirtualListProps`|`-`|2.50.0|
 ### `<auto-complete>` Events
 
 |事件名|描述|参数|版本|
@@ -36,6 +37,8 @@ description: 输入框的自动补全功能。
 |search|用户搜索时触发|value: `string`||
 |select|选择选项时触发|value: `string`||
 |clear|用户点击清除按钮时触发|ev: `Event`|2.23.0|
+|dropdown-scroll|下拉菜单发生滚动时触发|ev: `Event`|2.52.0|
+|dropdown-reach-bottom|下拉菜单滚动到底部时触发|ev: `Event`|2.52.0|
 ### `<auto-complete>` Methods
 
 |方法名|描述|参数|返回值|版本|

@@ -84,7 +84,14 @@ description: 基本表单组件，并在原生控件基础上进行了功能扩�
 
 |参数名|描述|类型|默认值|
 |---|---|---|:---:|
+|visibility **(v-model)**|是否可见，受控属性|`boolean`|`-`|
+|default-visibility|默认是否可见，非受控|`boolean`|`true`|
 |invisible-button|是否显示可见按钮|`boolean`|`true`|
+### `<input-password>` Events
+
+|事件名|描述|参数|
+|---|---|---|
+|visibility-change|visibility 改变时触发|visible: `boolean`|
 
 
 
@@ -98,7 +105,7 @@ description: 基本表单组件，并在原生控件基础上进行了功能扩�
 |disabled|是否禁用|`boolean`|`false`||
 |size|输入框大小|`'mini' \| 'small' \| 'medium' \| 'large'`|`'medium'`||
 |button-text|搜索按钮的文字，使用后会替换原本的图标|`string`|`-`|2.16.0|
-|button-props|搜索按钮的属性|`object`|`-`||
+|button-props|搜索按钮的属性|`ButtonProps`|`-`||
 ### `<input-search>` Events
 
 |事件名|描述|参数|

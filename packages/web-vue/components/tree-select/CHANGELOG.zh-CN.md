@@ -2,6 +2,55 @@
 changelog: true
 ```
 
+## 2.55.0
+
+`2024-03-15`
+
+### 🆕 新增功能
+
+- 新增 `input-value` 相关属性 ([#3024](https://github.com/arco-design/arco-design-vue/pull/3024))
+
+
+## 2.49.1
+
+`2023-07-24`
+
+### 🐛 问题修复
+
+- 修复 `border` 属性默认值错误的问题 ([#2580](https://github.com/arco-design/arco-design-vue/pull/2580))
+
+
+## 2.49.0
+
+`2023-07-21`
+
+### 🆕 新增功能
+
+- 增加空状态下 header 和 footer 的显示状态 ([#2573](https://github.com/arco-design/arco-design-vue/pull/2573))
+
+### 🐛 问题修复
+
+- 修复 border 属性失效的问题 ([#2568](https://github.com/arco-design/arco-design-vue/pull/2568))
+
+
+## 2.47.1
+
+`2023-06-09`
+
+### 🐛 问题修复
+
+- 修复在虚拟列表下搜索内容不可选择的问题 ([#2488](https://github.com/arco-design/arco-design-vue/pull/2488))
+
+
+## 2.47.0
+
+`2023-06-02`
+
+### 🆕 新增功能
+
+- 增加树选择器页头和页脚插槽 ([#2417](https://github.com/arco-design/arco-design-vue/pull/2417))
+
+
 ## 2.39.1
 
 `2022-11-25`

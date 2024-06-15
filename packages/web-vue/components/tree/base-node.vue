@@ -1,5 +1,5 @@
 <template>
-  <div :class="classNames">
+  <div :class="classNames" :data-level="level" :data-key="nodekey">
     <!-- 缩进 -->
     <span :class="`${prefixCls}-indent`">
       <span
@@ -87,7 +87,7 @@
       <span :class="`${prefixCls}-title-text`">
         <RenderFunction v-if="treeTitle" :render-func="treeTitle" />
         <!-- 标题，treeTitle 优先级高于节点的 title -->
-        <slot v-else name="title">{{ title }}</slot>
+        <slot v-else name="title" :title="title">{{ title }}</slot>
 
         <span
           v-if="draggable"
@@ -150,10 +150,6 @@ export default defineComponent({
     IconDragDotVertical,
   },
   props: {
-    /** 唯一标示 */
-    key: {
-      type: [String, Number] as PropType<string | number>,
-    },
     /** 标题 */
     title: {
       type: String,
@@ -183,16 +179,16 @@ export default defineComponent({
       type: Boolean,
     },
     icon: {
-      type: Function as PropType<() => VNode[]>,
+      type: Function as PropType<() => VNode>,
     },
     switcherIcon: {
-      type: Function as PropType<() => VNode[]>,
+      type: Function as PropType<() => VNode>,
     },
     loadingIcon: {
-      type: Function as PropType<() => VNode[]>,
+      type: Function as PropType<() => VNode>,
     },
     dragIcon: {
-      type: Function as PropType<() => VNode[]>,
+      type: Function as PropType<() => VNode>,
     },
     isTail: {
       type: Boolean,
@@ -323,6 +319,7 @@ export default defineComponent({
     );
 
     return {
+      nodekey: key,
       refTitle,
       prefixCls,
       classNames,

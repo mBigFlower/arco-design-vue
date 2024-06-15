@@ -36,7 +36,7 @@
               :style="mergedModalStyle"
             >
               <div
-                v-if="$slots.title || title || closable"
+                v-if="!hideTitle && ($slots.title || title || closable)"
                 :class="`${prefixCls}-header`"
                 @mousedown="handleMoveDown"
               >
@@ -115,7 +115,7 @@ import { getPrefixCls } from '../_utils/global-config';
 import { MessageType } from '../_utils/constant';
 import ClientOnly from '../_components/client-only';
 import IconHover from '../_components/icon-hover.vue';
-import ArcoButton from '../button';
+import ArcoButton, { ButtonProps } from '../button';
 import IconClose from '../icon/icon-close';
 import IconInfoCircleFill from '../icon/icon-info-circle-fill';
 import IconCheckCircleFill from '../icon/icon-check-circle-fill';
@@ -271,14 +271,14 @@ export default defineComponent({
      * @en Props of confirm button
      */
     okButtonProps: {
-      type: Object,
+      type: Object as PropType<ButtonProps>,
     },
     /**
      * @zh 取消按钮的Props
      * @en Props of cancel button
      */
     cancelButtonProps: {
-      type: Object,
+      type: Object as PropType<ButtonProps>,
     },
     /**
      * @zh 是否展示页脚部分
@@ -422,42 +422,54 @@ export default defineComponent({
     messageType: {
       type: String as PropType<MessageType>,
     },
+    /**
+     * @zh 是否隐藏标题
+     * @en Whether to hide the title
+     * @defaultValue false
+     * @version 2.50.0
+     */
+    hideTitle: {
+      type: Boolean,
+      default: false,
+    },
   },
-  emits: [
-    'update:visible',
+  emits: {
+    'update:visible': (visible: boolean) => true,
     /**
      * @zh 点击确定按钮时触发
      * @en Triggered when the OK button is clicked
+     * @property {MouseEvent} ev
      */
-    'ok',
+    'ok': (e: Event) => true,
     /**
      * @zh 点击取消、关闭按钮时触发
      * @en Triggered when the cancel/close button is clicked
+     * @property {MouseEvent | KeyboardEvent} ev
      */
-    'cancel',
+    'cancel': (e: Event) => true,
     /**
      * @zh 对话框打开后（动画结束）触发
      * @en Triggered after the modal is opened (the animation ends)
      */
-    'open',
+    'open': () => true,
     /**
      * @zh 对话框关闭后（动画结束）触发
      * @en Triggered after the modal is closed (the animation ends)
      */
-    'close',
+    'close': () => true,
     /**
      * @zh 对话框打开前触发
      * @en Triggered before dialog is opened
      * @version 2.16.0
      */
-    'beforeOpen',
+    'beforeOpen': () => true,
     /**
      * @zh 对话框关闭前触发
      * @en Triggered before dialog is closed
      * @version 2.16.0
      */
-    'beforeClose',
-  ],
+    'beforeClose': () => true,
+  },
   /**
    * @zh 标题
    * @en Title
@@ -469,7 +481,7 @@ export default defineComponent({
    * @slot footer
    */
   setup(props, { emit }) {
-    const { fullscreen, popupContainer } = toRefs(props);
+    const { fullscreen, popupContainer, alignCenter } = toRefs(props);
     const prefixCls = getPrefixCls('modal');
     const { t } = useI18n();
     const wrapperRef = ref<HTMLElement>();
@@ -503,7 +515,7 @@ export default defineComponent({
 
     const handleGlobalKeyDown = (ev: KeyboardEvent) => {
       if (props.escToClose && ev.key === KEYBOARD_KEY.ESC && isLastDialog()) {
-        handleCancel();
+        handleCancel(ev);
       }
     };
 
@@ -526,6 +538,7 @@ export default defineComponent({
       wrapperRef,
       modalRef,
       draggable: mergedDraggable,
+      alignCenter,
     });
 
     const close = () => {
@@ -537,7 +550,7 @@ export default defineComponent({
       emit('update:visible', false);
     };
 
-    const handleOk = async () => {
+    const handleOk = async (e: Event) => {
       const currentPromiseNumber = promiseNumber;
       const closed = await new Promise<boolean>(
         // eslint-disable-next-line no-async-promise-executor
@@ -566,7 +579,7 @@ export default defineComponent({
 
       if (currentPromiseNumber === promiseNumber) {
         if (closed) {
-          emit('ok');
+          emit('ok', e);
           close();
         } else if (_okLoading.value) {
           _okLoading.value = false;
@@ -574,13 +587,13 @@ export default defineComponent({
       }
     };
 
-    const handleCancel = () => {
+    const handleCancel = (e: Event) => {
       let result = true;
       if (isFunction(props.onBeforeCancel)) {
         result = props.onBeforeCancel() ?? false;
       }
       if (result) {
-        emit('cancel');
+        emit('cancel', e);
         close();
       }
     };
@@ -593,9 +606,9 @@ export default defineComponent({
       }
     };
 
-    const handleMaskClick = () => {
+    const handleMaskClick = (e: Event) => {
       if (props.mask && props.maskClosable && currentIsMask.value) {
-        handleCancel();
+        handleCancel(e);
       }
     };
 
@@ -685,7 +698,8 @@ export default defineComponent({
       const style: CSSProperties = {
         ...(props.modalStyle ?? {}),
       };
-      if (props.width) {
+      // 修复设置width属性后，全屏无法生效的问题
+      if (props.width && !props.fullscreen) {
         style.width = isNumber(props.width) ? `${props.width}px` : props.width;
       }
       if (!props.alignCenter && props.top) {
